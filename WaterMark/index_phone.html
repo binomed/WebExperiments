@@ -3,8 +3,33 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
+	<script src="/lib/sonicnet/build/sonicnet.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
 <body>
-	
+
+<div id="message"> click me</div>
+	<script>
+	var audioContext = new webkitAudioContext();
+	var ALPHABET = '0123456789';
+	var MESSAGE = '314159';
+
+	var button = document.querySelector('#message');
+	button.addEventListener('click', onButton);
+
+	function onButton() {
+	  ssocket = new SonicSocket({alphabet: ALPHABET, charDuration: 0.2});
+	  ssocket.send(MESSAGE);
+	}
+
+	// On some other machine:
+	sserver = new SonicServer({alphabet: ALPHABET});
+	sserver.on('message', function(message) {
+	  // message is '31415'. Do something with it.
+	  console.log(message);
+	});
+	sserver.start();
+</script>
+
 </body>
 </html>
