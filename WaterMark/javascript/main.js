@@ -5,8 +5,8 @@ var SonicCoder = require('../lib/waterjef/sonic-coder.js');
 
 document.addEventListener("DOMContentLoaded", function(event) { 
   //do work
-	var ALPHABET = '0123456789';
-	var MESSAGE = '1';
+	//var ALPHABET = '0123456789';
+	//var MESSAGE = '1';
 
 	var button = document.querySelector('#message');
 	button.addEventListener('click', onButton);
@@ -18,12 +18,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}
 
 	// On some other machine:
-	sserver = new SonicServer({alphabet: ALPHABET});
-	sserver.on('message', function(message) {
+	//sserver = new SonicServer({alphabet: ALPHABET});
+	//sserver.on('message', function(message) {
 	  // message is '31415'. Do something with it.
-	  console.log(message);
-	});
-	sserver.start();
+	//  console.log(message);
+	//});
+	//sserver.start();
 
 
 	var audioContext = window.audioContext || new webkitAudioContext();
