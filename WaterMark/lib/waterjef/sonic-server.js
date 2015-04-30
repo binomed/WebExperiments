@@ -94,7 +94,8 @@ SonicServer.prototype.onStream_ = function(stream) {
   this.analyser = analyser;
   this.isRunning = true;
   // Do an FFT and check for inaudible peaks.
-  this.raf_(this.loop.bind(this));
+  //this.raf_(this.loop.bind(this));
+  this.raf_(this.customLoop.bind(this));
 };
 
 SonicServer.prototype.onStreamError_ = function(e) {
@@ -120,10 +121,38 @@ SonicServer.prototype.getPeakFrequency = function() {
   }
   // Only care about sufficiently tall peaks.
   if (max > this.peakThreshold) {
+    console.log("Max : "+max+", for freq : "+this.indexToFreq(index));
     return this.indexToFreq(index);
   }
   return null;
 };
+
+SonicServer.prototype.customLoop = function(){
+  this.analyser.getFloatFrequencyData(this.freqs);
+  // Sanity check the peaks every 5 seconds.
+  if ((this.iteration + 1) % (60 * 5) == 0) {
+    this.restartServerIfSanityCheckFails();
+  }
+  // Calculate peaks, and add them to history.
+  var freq = this.getPeakFrequency();
+  if (freq) {
+    //if (this.state = State.IDLE){
+    //  this.state = State.RECV;
+      //console.log('Recieve Freq ! '+freq);
+    //}
+    //this.peakTimes.add(new Date());
+  } else {
+    //this.state = State.IDLE;
+  }
+  // DEBUG ONLY: Draw the frequency response graph.
+  if (this.debug) {
+    this.debugDraw_();
+  }
+  if (this.isRunning) {
+    this.raf_(this.customLoop.bind(this));
+  }
+  this.iteration += 1;
+}
 
 SonicServer.prototype.loop = function() {
   this.analyser.getFloatFrequencyData(this.freqs);

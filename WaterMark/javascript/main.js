@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		setTimeout(function() {
 			oscillator.stop();
-		}, 5000);
+		}, 10000);
 
 		/*var gainNode = audioContext.createGain();
 		// Gain => Merger

@@ -37,6 +37,12 @@ gulp.task('browserify',function(){
     }))
     .pipe(rename('bundle.js'))
     .pipe(gulp.dest('./'));
+  gulp.src('./javascript/main_phone.js')
+    .pipe(browserify({
+      insertGlobals : true
+    }))
+    .pipe(rename('bundle_phone.js'))
+    .pipe(gulp.dest('./'));
 });
 
 /* Default task */
