@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
 
-}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_1397ec10.js","/")
+}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_90b74c56.js","/")
 },{"../lib/waterjef/sonic-coder.js":3,"../lib/waterjef/sonic-server.js":4,"../lib/waterjef/sonic-socket.js":5,"1YiZ5S":9,"buffer":6}],2:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 function RingBuffer(maxLength) {
@@ -317,6 +317,34 @@ SonicServer.prototype.getPeakFrequency = function() {
   return null;
 };
 
+/**
+ * Given an FFT frequency analysis, return the peak frequency in a frequency
+ * range.
+ */
+SonicServer.prototype.getCustomPeakFrequency = function() {
+  // Find where to start.
+  var start = this.freqToIndex(this.coder.freqMin);
+  // TODO: use first derivative to find the peaks, and then find the largest peak.
+  // Just do a max over the set.
+  var max = -Infinity;
+  var index = -1;
+  for (var i = start; i < this.freqs.length; i++) {
+    if (this.freqs[i] > max) {
+      max = this.freqs[i];
+      index = i;
+    }
+  }
+  // Only care about sufficiently tall peaks.
+  if (max > this.peakThreshold) {
+    console.log("Max : "+max+", for freq : "+this.indexToFreq(index));
+    return {
+      freq: this.indexToFreq(index),
+      power : max
+    };
+  }
+  return null;
+};
+
 SonicServer.prototype.customLoop = function(){
   this.analyser.getFloatFrequencyData(this.freqs);
   // Sanity check the peaks every 5 seconds.
@@ -324,15 +352,17 @@ SonicServer.prototype.customLoop = function(){
     this.restartServerIfSanityCheckFails();
   }
   // Calculate peaks, and add them to history.
-  var freq = this.getPeakFrequency();
-  if (freq) {
-    //if (this.state = State.IDLE){
-    //  this.state = State.RECV;
+  var res = this.getCustomPeakFrequency();
+  if (res) {
+    if (this.state = State.IDLE){
+      this.state = State.RECV;
       //console.log('Recieve Freq ! '+freq);
-    //}
+    }
+    this.fire_(this.callbacks.message, res);
+
     //this.peakTimes.add(new Date());
   } else {
-    //this.state = State.IDLE;
+    this.state = State.IDLE;
   }
   // DEBUG ONLY: Draw the frequency response graph.
   if (this.debug) {

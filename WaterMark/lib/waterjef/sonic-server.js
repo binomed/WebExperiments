@@ -127,6 +127,33 @@ SonicServer.prototype.getPeakFrequency = function() {
   return null;
 };
 
+/**
+ * Given an FFT frequency analysis, return the peak frequency in a frequency
+ * range.
+ */
+SonicServer.prototype.getCustomPeakFrequency = function() {
+  // Find where to start.
+  var start = this.freqToIndex(this.coder.freqMin);
+  // TODO: use first derivative to find the peaks, and then find the largest peak.
+  // Just do a max over the set.
+  var max = -Infinity;
+  var index = -1;
+  for (var i = start; i < this.freqs.length; i++) {
+    if (this.freqs[i] > max) {
+      max = this.freqs[i];
+      index = i;
+    }
+  }
+  // Only care about sufficiently tall peaks.
+  if (max > this.peakThreshold) {    
+    return {
+      freq: this.indexToFreq(index),
+      power : max
+    };
+  }
+  return null;
+};
+
 SonicServer.prototype.customLoop = function(){
   this.analyser.getFloatFrequencyData(this.freqs);
   // Sanity check the peaks every 5 seconds.
@@ -134,15 +161,17 @@ SonicServer.prototype.customLoop = function(){
     this.restartServerIfSanityCheckFails();
   }
   // Calculate peaks, and add them to history.
-  var freq = this.getPeakFrequency();
-  if (freq) {
-    //if (this.state = State.IDLE){
-    //  this.state = State.RECV;
+  var res = this.getCustomPeakFrequency();
+  if (res) {
+    if (this.state = State.IDLE){
+      this.state = State.RECV;
       //console.log('Recieve Freq ! '+freq);
-    //}
+    }
+    this.fire_(this.callbacks.message, res);
+
     //this.peakTimes.add(new Date());
   } else {
-    //this.state = State.IDLE;
+    this.state = State.IDLE;
   }
   // DEBUG ONLY: Draw the frequency response graph.
   if (this.debug) {

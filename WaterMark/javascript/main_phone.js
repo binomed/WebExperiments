@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	  console.log(message);
 	});*/
 	sserver.setDebug(true);
+	sserver.on('message', function(message){
+		console.info('Recieve message : %d Mhz, %d db',message.freq, message.power);
+	});
 	sserver.start();
 	
 });
