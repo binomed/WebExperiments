@@ -145,6 +145,7 @@ SonicServer.prototype.getCustomPeakFrequency = function() {
     }
   }
   // Only care about sufficiently tall peaks.
+  console.log("Max : "+max+", for freq : "+this.indexToFreq(index));
   if (max > this.peakThreshold) {    
     return {
       freq: this.indexToFreq(index),

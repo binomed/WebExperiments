@@ -10,11 +10,29 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	var button = document.querySelector('#message');
 	button.addEventListener('click', onButton);
+	var buttonStop = document.querySelector('#stop');
+	buttonStop.addEventListener('click', onButtonStop);
+
+	var slider = document.querySelector('#slider');
+	slider.addEventListener('change', onChange);
+
+	var state = document.querySelector('#state');
+	var value = document.querySelector('#value');
 
 	function onButton() {
-		sendFreq();
-	  //ssocket = new SonicSocket({alphabet: ALPHABET, charDuration: 10/*0.2*/});
-	  //ssocket.send(MESSAGE);
+		state.innerHTML = 'Emmission';
+		sendFreq(); 
+	}
+
+	function onButtonStop() {
+		if (oscillator){
+			oscillator.stop();
+			state.innerHTML = 'Stop Emmission';
+		}
+	}
+
+	function onChange(){
+		value.innerHTML = slider.value;
 	}
 
 	// On some other machine:
@@ -33,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		context = audioContext;
 		oscillator = context.createOscillator();
-		oscillator.frequency.value = 19000;
+		oscillator.frequency.value = slider.value;
 
 		oscillator.connect(context.destination);
 
@@ -41,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		setTimeout(function() {
 			oscillator.stop();
+			state.innerHTML = 'Stop Emmission';
 		}, 10000);
 
 		/*var gainNode = audioContext.createGain();
