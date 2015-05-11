@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	var showMe = document.getElementById('showMe');
 	showMe.style.display = 'none';
-	var freq = document.getElementById('freq');
+	var freq = document.getElementById('freq'); 
 	var power = document.getElementById('power');
 	
 	// On some other machine:

@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	function onButton() {
 		state.innerHTML = 'Emmission';
-		sendFreq(); 
+		sendFreq();  
 	}
 
 	function onButtonStop() {

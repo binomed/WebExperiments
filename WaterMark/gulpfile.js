@@ -9,14 +9,16 @@ var browserify = require("gulp-browserify");
 var rename = require("gulp-rename");
 var reload = browserSync.reload;
 
-gulp.task('serve',  ['less'], function(){
+gulp.task('serve',  ['browserify','less'], function(){
   browserSync.init({
     server:'./'
   });
   gulp.watch("less/**/*.less", ['less']);
   gulp.watch("./**/*.html").on('change', reload);
   gulp.watch("./javascript/**/*.js", ['browserify']);
+  gulp.watch("./lib/waterjef/*.js", ['browserify']);
   gulp.watch("./bundle.js").on('change', reload);
+  gulp.watch("./bundle_phone.js").on('change', reload);
 });
 
 gulp.task('less',function(){
@@ -32,15 +34,19 @@ gulp.task('less',function(){
 
 gulp.task('browserify',function(){
   gulp.src('./javascript/main.js')
+    .pipe(sourcemaps.init())
     .pipe(browserify({
       insertGlobals : true
     }))
+    .pipe(sourcemaps.write())
     .pipe(rename('bundle.js'))
     .pipe(gulp.dest('./'));
   gulp.src('./javascript/main_phone.js')
+    .pipe(sourcemaps.init())
     .pipe(browserify({
       insertGlobals : true
     }))
+    .pipe(sourcemaps.write())
     .pipe(rename('bundle_phone.js'))
     .pipe(gulp.dest('./'));
 });

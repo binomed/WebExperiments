@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	var showMe = document.getElementById('showMe');
 	showMe.style.display = 'none';
-	var freq = document.getElementById('freq');
+	var freq = document.getElementById('freq'); 
 	var power = document.getElementById('power');
 	
 	// On some other machine:
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
 
-}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_635c0f3.js","/")
+}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_896218d9.js","/")
 },{"../lib/waterjef/sonic-coder.js":3,"../lib/waterjef/sonic-server.js":4,"../lib/waterjef/sonic-socket.js":5,"VCmEsw":9,"buffer":6}],2:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 function RingBuffer(maxLength) {
@@ -1970,3 +1970,4 @@ process.chdir = function (dir) {
 
 }).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\node_modules\\gulp-browserify\\node_modules\\browserify\\node_modules\\process\\browser.js","/..\\node_modules\\gulp-browserify\\node_modules\\browserify\\node_modules\\process")
 },{"VCmEsw":9,"buffer":6}]},{},[1])
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiIiwic291cmNlcyI6WyJtYWluX3Bob25lLmpzIl0sInNvdXJjZXNDb250ZW50IjpbInZhciBTb25pY1NvY2tldCA9IHJlcXVpcmUoJy4uL2xpYi93YXRlcmplZi9zb25pYy1zb2NrZXQuanMnKTtcclxudmFyIFNvbmljU2VydmVyID0gcmVxdWlyZSgnLi4vbGliL3dhdGVyamVmL3NvbmljLXNlcnZlci5qcycpO1xyXG52YXIgU29uaWNDb2RlciA9IHJlcXVpcmUoJy4uL2xpYi93YXRlcmplZi9zb25pYy1jb2Rlci5qcycpO1xyXG5cclxuXHJcbmRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoXCJET01Db250ZW50TG9hZGVkXCIsIGZ1bmN0aW9uKGV2ZW50KSB7IFxyXG4gIC8vZG8gd29ya1xyXG5cdHZhciBBTFBIQUJFVCA9ICcwMTIzNDU2Nzg5JztcclxuXHQvL3ZhciBNRVNTQUdFID0gJzEnOyBcclxuXHJcblx0dmFyIHNob3dNZSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzaG93TWUnKTtcclxuXHRzaG93TWUuc3R5bGUuZGlzcGxheSA9ICdub25lJztcclxuXHR2YXIgZnJlcSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdmcmVxJyk7IFxyXG5cdHZhciBwb3dlciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwb3dlcicpO1xyXG5cdFxyXG5cdC8vIE9uIHNvbWUgb3RoZXIgbWFjaGluZTpcclxuXHRzc2VydmVyID0gbmV3IFNvbmljU2VydmVyKHthbHBoYWJldDogQUxQSEFCRVQsIHBlYWtUaHJlc2hvbGQ6IC0xNTB9KTtcclxuXHRzc2VydmVyLnNldERlYnVnKHRydWUpO1xyXG5cdHNzZXJ2ZXIub24oJ21lc3NhZ2UnLCBmdW5jdGlvbihtZXNzYWdlKXtcclxuXHJcblx0XHRpZiAoc2hvd01lLnN0eWxlLmRpc3BsYXkgPT09ICdub25lJyl7XHJcblx0XHRcdHNob3dNZS5zdHlsZS5kaXNwbGF5ID0gJyc7XHJcblx0XHR9XHJcblx0XHRmcmVxLmlubmVySFRNTCA9IG1lc3NhZ2UuZnJlcStcIk1oelwiO1xyXG5cdFx0cG93ZXIuaW5uZXJIVE1MID0gbWVzc2FnZS5wb3dlcitcImRiXCI7XHJcblx0XHRjb25zb2xlLmluZm8oJ1JlY2lldmUgbWVzc2FnZSA6ICVkIE1oeiwgJWQgZGInLG1lc3NhZ2UuZnJlcSwgbWVzc2FnZS5wb3dlcik7XHJcblx0fSk7XHJcblx0c3NlcnZlci5zdGFydCgpO1xyXG5cdFxyXG59KTtcclxuXHJcblxyXG4iXSwiZmlsZSI6Im1haW5fcGhvbmUuanMiLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ==
