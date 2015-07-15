@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
 
-}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_896218d9.js","/")
+}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_95769b57.js","/")
 },{"../lib/waterjef/sonic-coder.js":3,"../lib/waterjef/sonic-server.js":4,"../lib/waterjef/sonic-socket.js":5,"VCmEsw":9,"buffer":6}],2:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 function RingBuffer(maxLength) {
@@ -157,7 +157,7 @@ module.exports = SonicCoder;
 var RingBuffer = require('./ring-buffer.js');
 var SonicCoder = require('./sonic-coder.js');
 
-var audioContext = window.audioContext || new webkitAudioContext();
+var audioContext = new (window.audioContext || window.webkitAudioContext)();
 /**
  * Extracts meaning from audio streams.
  *
@@ -513,7 +513,7 @@ module.exports = SonicServer;
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var SonicCoder = require('./sonic-coder.js');
 
-var audioContext = window.audioContext || new webkitAudioContext();
+var audioContext = new (window.audioContext || window.webkitAudioContext)();
 
 /**
  * Encodes text as audio streams.
