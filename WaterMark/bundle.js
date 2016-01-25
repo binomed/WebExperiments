@@ -139,8 +139,8 @@ RingBuffer.prototype.remove = function(index, length) {
 
 module.exports = RingBuffer;
 
-}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\lib\\waterjef\\ring-buffer.js","/..\\lib\\waterjef")
-},{"VCmEsw":9,"buffer":6}],3:[function(require,module,exports){
+}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../lib/waterjef/ring-buffer.js","/../lib/waterjef")
+},{"1YiZ5S":9,"buffer":6}],3:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /**
  * A simple sonic encoder/decoder for [a-z0-9] => frequency (and back).
@@ -204,8 +204,8 @@ SonicCoder.prototype.freqToChar = function(freq) {
 
 module.exports = SonicCoder;
 
-}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\lib\\waterjef\\sonic-coder.js","/..\\lib\\waterjef")
-},{"VCmEsw":9,"buffer":6}],4:[function(require,module,exports){
+}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../lib/waterjef/sonic-coder.js","/../lib/waterjef")
+},{"1YiZ5S":9,"buffer":6}],4:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var RingBuffer = require('./ring-buffer.js');
 var SonicCoder = require('./sonic-coder.js');
@@ -561,8 +561,8 @@ SonicServer.prototype.restart = function() {
 
 module.exports = SonicServer;
 
-}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\lib\\waterjef\\sonic-server.js","/..\\lib\\waterjef")
-},{"./ring-buffer.js":2,"./sonic-coder.js":3,"VCmEsw":9,"buffer":6}],5:[function(require,module,exports){
+}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../lib/waterjef/sonic-server.js","/../lib/waterjef")
+},{"./ring-buffer.js":2,"./sonic-coder.js":3,"1YiZ5S":9,"buffer":6}],5:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var SonicCoder = require('./sonic-coder.js');
 
@@ -625,8 +625,8 @@ SonicSocket.prototype.scheduleToneAt = function(freq, startTime, duration) {
 
 module.exports = SonicSocket;
 
-}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\lib\\waterjef\\sonic-socket.js","/..\\lib\\waterjef")
-},{"./sonic-coder.js":3,"VCmEsw":9,"buffer":6}],6:[function(require,module,exports){
+}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../lib/waterjef/sonic-socket.js","/../lib/waterjef")
+},{"./sonic-coder.js":3,"1YiZ5S":9,"buffer":6}],6:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*!
  * The buffer module from node.js, for the browser.
@@ -1738,8 +1738,8 @@ function assert (test, message) {
   if (!test) throw new Error(message || 'Failed assertion')
 }
 
-}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\node_modules\\gulp-browserify\\node_modules\\browserify\\node_modules\\buffer\\index.js","/..\\node_modules\\gulp-browserify\\node_modules\\browserify\\node_modules\\buffer")
-},{"VCmEsw":9,"base64-js":7,"buffer":6,"ieee754":8}],7:[function(require,module,exports){
+}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/index.js","/../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer")
+},{"1YiZ5S":9,"base64-js":7,"buffer":6,"ieee754":8}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
@@ -1866,10 +1866,10 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\node_modules\\gulp-browserify\\node_modules\\browserify\\node_modules\\buffer\\node_modules\\base64-js\\lib\\b64.js","/..\\node_modules\\gulp-browserify\\node_modules\\browserify\\node_modules\\buffer\\node_modules\\base64-js\\lib")
-},{"VCmEsw":9,"buffer":6}],8:[function(require,module,exports){
+}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js","/../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib")
+},{"1YiZ5S":9,"buffer":6}],8:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-exports.read = function (buffer, offset, isLE, mLen, nBytes) {
+exports.read = function(buffer, offset, isLE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
       eMax = (1 << eLen) - 1,
@@ -1877,32 +1877,32 @@ exports.read = function (buffer, offset, isLE, mLen, nBytes) {
       nBits = -7,
       i = isLE ? (nBytes - 1) : 0,
       d = isLE ? -1 : 1,
-      s = buffer[offset + i]
+      s = buffer[offset + i];
 
-  i += d
+  i += d;
 
-  e = s & ((1 << (-nBits)) - 1)
-  s >>= (-nBits)
-  nBits += eLen
-  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+  e = s & ((1 << (-nBits)) - 1);
+  s >>= (-nBits);
+  nBits += eLen;
+  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8);
 
-  m = e & ((1 << (-nBits)) - 1)
-  e >>= (-nBits)
-  nBits += mLen
-  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+  m = e & ((1 << (-nBits)) - 1);
+  e >>= (-nBits);
+  nBits += mLen;
+  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8);
 
   if (e === 0) {
-    e = 1 - eBias
+    e = 1 - eBias;
   } else if (e === eMax) {
-    return m ? NaN : ((s ? -1 : 1) * Infinity)
+    return m ? NaN : ((s ? -1 : 1) * Infinity);
   } else {
-    m = m + Math.pow(2, mLen)
-    e = e - eBias
+    m = m + Math.pow(2, mLen);
+    e = e - eBias;
   }
-  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
-}
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen);
+};
 
-exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
+exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
   var e, m, c,
       eLen = nBytes * 8 - mLen - 1,
       eMax = (1 << eLen) - 1,
@@ -1910,52 +1910,52 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
       rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0),
       i = isLE ? 0 : (nBytes - 1),
       d = isLE ? 1 : -1,
-      s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
+      s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0;
 
-  value = Math.abs(value)
+  value = Math.abs(value);
 
   if (isNaN(value) || value === Infinity) {
-    m = isNaN(value) ? 1 : 0
-    e = eMax
+    m = isNaN(value) ? 1 : 0;
+    e = eMax;
   } else {
-    e = Math.floor(Math.log(value) / Math.LN2)
+    e = Math.floor(Math.log(value) / Math.LN2);
     if (value * (c = Math.pow(2, -e)) < 1) {
-      e--
-      c *= 2
+      e--;
+      c *= 2;
     }
     if (e + eBias >= 1) {
-      value += rt / c
+      value += rt / c;
     } else {
-      value += rt * Math.pow(2, 1 - eBias)
+      value += rt * Math.pow(2, 1 - eBias);
     }
     if (value * c >= 2) {
-      e++
-      c /= 2
+      e++;
+      c /= 2;
     }
 
     if (e + eBias >= eMax) {
-      m = 0
-      e = eMax
+      m = 0;
+      e = eMax;
     } else if (e + eBias >= 1) {
-      m = (value * c - 1) * Math.pow(2, mLen)
-      e = e + eBias
+      m = (value * c - 1) * Math.pow(2, mLen);
+      e = e + eBias;
     } else {
-      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
-      e = 0
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
+      e = 0;
     }
   }
 
-  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8);
 
-  e = (e << mLen) | m
-  eLen += mLen
-  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+  e = (e << mLen) | m;
+  eLen += mLen;
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8);
 
-  buffer[offset + i - d] |= s * 128
-}
+  buffer[offset + i - d] |= s * 128;
+};
 
-}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\node_modules\\gulp-browserify\\node_modules\\browserify\\node_modules\\buffer\\node_modules\\ieee754\\index.js","/..\\node_modules\\gulp-browserify\\node_modules\\browserify\\node_modules\\buffer\\node_modules\\ieee754")
-},{"VCmEsw":9,"buffer":6}],9:[function(require,module,exports){
+}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js","/../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/ieee754")
+},{"1YiZ5S":9,"buffer":6}],9:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 // shim for using process in browser
 
@@ -2021,6 +2021,6 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\node_modules\\gulp-browserify\\node_modules\\browserify\\node_modules\\process\\browser.js","/..\\node_modules\\gulp-browserify\\node_modules\\browserify\\node_modules\\process")
-},{"VCmEsw":9,"buffer":6}]},{},[1])
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiIiwic291cmNlcyI6WyJtYWluLmpzIl0sInNvdXJjZXNDb250ZW50IjpbInZhciBTb25pY1NvY2tldCA9IHJlcXVpcmUoJy4uL2xpYi93YXRlcmplZi9zb25pYy1zb2NrZXQuanMnKTtcclxudmFyIFNvbmljU2VydmVyID0gcmVxdWlyZSgnLi4vbGliL3dhdGVyamVmL3NvbmljLXNlcnZlci5qcycpO1xyXG52YXIgU29uaWNDb2RlciA9IHJlcXVpcmUoJy4uL2xpYi93YXRlcmplZi9zb25pYy1jb2Rlci5qcycpO1xyXG5cclxuXHJcbmRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoXCJET01Db250ZW50TG9hZGVkXCIsIGZ1bmN0aW9uKGV2ZW50KSB7IFxyXG4gIC8vZG8gd29ya1xyXG5cdC8vdmFyIEFMUEhBQkVUID0gJzAxMjM0NTY3ODknO1xyXG5cdC8vdmFyIE1FU1NBR0UgPSAnMSc7XHJcblxyXG5cdHZhciBidXR0b24gPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjbWVzc2FnZScpO1xyXG5cdGJ1dHRvbi5hZGRFdmVudExpc3RlbmVyKCdjbGljaycsIG9uQnV0dG9uKTtcclxuXHR2YXIgYnV0dG9uU3RvcCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJyNzdG9wJyk7XHJcblx0YnV0dG9uU3RvcC5hZGRFdmVudExpc3RlbmVyKCdjbGljaycsIG9uQnV0dG9uU3RvcCk7XHJcblxyXG5cdHZhciBzbGlkZXIgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjc2xpZGVyJyk7XHJcblx0c2xpZGVyLmFkZEV2ZW50TGlzdGVuZXIoJ2NoYW5nZScsIG9uQ2hhbmdlKTtcclxuXHJcblx0dmFyIHN0YXRlID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI3N0YXRlJyk7XHJcblx0dmFyIHZhbHVlID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI3ZhbHVlJyk7XHJcblxyXG5cdGZ1bmN0aW9uIG9uQnV0dG9uKCkge1xyXG5cdFx0c3RhdGUuaW5uZXJIVE1MID0gJ0VtbWlzc2lvbic7XHJcblx0XHRzZW5kRnJlcSgpOyAgXHJcblx0fVxyXG5cclxuXHRmdW5jdGlvbiBvbkJ1dHRvblN0b3AoKSB7XHJcblx0XHRpZiAob3NjaWxsYXRvcil7XHJcblx0XHRcdG9zY2lsbGF0b3Iuc3RvcCgpO1xyXG5cdFx0XHRzdGF0ZS5pbm5lckhUTUwgPSAnU3RvcCBFbW1pc3Npb24nO1xyXG5cdFx0fVxyXG5cdH1cclxuXHJcblx0ZnVuY3Rpb24gb25DaGFuZ2UoKXtcclxuXHRcdHZhbHVlLmlubmVySFRNTCA9IHNsaWRlci52YWx1ZTtcclxuXHR9XHJcblxyXG5cdC8vIE9uIHNvbWUgb3RoZXIgbWFjaGluZTpcclxuXHQvL3NzZXJ2ZXIgPSBuZXcgU29uaWNTZXJ2ZXIoe2FscGhhYmV0OiBBTFBIQUJFVH0pO1xyXG5cdC8vc3NlcnZlci5vbignbWVzc2FnZScsIGZ1bmN0aW9uKG1lc3NhZ2UpIHtcclxuXHQgIC8vIG1lc3NhZ2UgaXMgJzMxNDE1Jy4gRG8gc29tZXRoaW5nIHdpdGggaXQuXHJcblx0Ly8gIGNvbnNvbGUubG9nKG1lc3NhZ2UpO1xyXG5cdC8vfSk7XHJcblx0Ly9zc2VydmVyLnN0YXJ0KCk7XHJcblxyXG5cclxuXHR2YXIgYXVkaW9Db250ZXh0ID0gd2luZG93LmF1ZGlvQ29udGV4dCB8fCBuZXcgd2Via2l0QXVkaW9Db250ZXh0KCk7XHJcblxyXG5cclxuXHRmdW5jdGlvbiBzZW5kRnJlcSgpe1xyXG5cclxuXHRcdGNvbnRleHQgPSBhdWRpb0NvbnRleHQ7XHJcblx0XHRvc2NpbGxhdG9yID0gY29udGV4dC5jcmVhdGVPc2NpbGxhdG9yKCk7XHJcblx0XHRvc2NpbGxhdG9yLmZyZXF1ZW5jeS52YWx1ZSA9IHNsaWRlci52YWx1ZTtcclxuXHJcblx0XHRvc2NpbGxhdG9yLmNvbm5lY3QoY29udGV4dC5kZXN0aW5hdGlvbik7XHJcblxyXG5cdFx0b3NjaWxsYXRvci5zdGFydCgwKTtcclxuXHJcblx0XHRzZXRUaW1lb3V0KGZ1bmN0aW9uKCkge1xyXG5cdFx0XHRvc2NpbGxhdG9yLnN0b3AoKTtcclxuXHRcdFx0c3RhdGUuaW5uZXJIVE1MID0gJ1N0b3AgRW1taXNzaW9uJztcclxuXHRcdH0sIDEwMDAwKTtcclxuXHJcblx0XHQvKnZhciBnYWluTm9kZSA9IGF1ZGlvQ29udGV4dC5jcmVhdGVHYWluKCk7XHJcblx0XHQvLyBHYWluID0+IE1lcmdlclxyXG5cdFx0Z2Fpbk5vZGUuZ2Fpbi52YWx1ZSA9IDE7XHJcblxyXG5cdFx0Z2Fpbk5vZGUuZ2Fpbi5zZXRWYWx1ZUF0VGltZSgxLCAwKTtcclxuXHRcdC8vZ2Fpbk5vZGUuZ2Fpbi5saW5lYXJSYW1wVG9WYWx1ZUF0VGltZSgxLCBzdGFydFRpbWUgKyB0aGlzLnJhbXBEdXJhdGlvbik7XHJcblx0XHQvL2dhaW5Ob2RlLmdhaW4uc2V0VmFsdWVBdFRpbWUoMSwgc3RhcnRUaW1lICsgZHVyYXRpb24gLSB0aGlzLnJhbXBEdXJhdGlvbik7XHJcblx0XHQvL2dhaW5Ob2RlLmdhaW4ubGluZWFyUmFtcFRvVmFsdWVBdFRpbWUoMCwgc3RhcnRUaW1lICsgZHVyYXRpb24pO1xyXG5cclxuXHRcdGdhaW5Ob2RlLmNvbm5lY3QoYXVkaW9Db250ZXh0LmRlc3RpbmF0aW9uKTtcclxuXHJcblx0XHR2YXIgb3NjID0gYXVkaW9Db250ZXh0LmNyZWF0ZU9zY2lsbGF0b3IoKTtcclxuXHRcdG9zYy5mcmVxdWVuY3kudmFsdWUgPSAxOTAwMDtcclxuXHRcdG9zYy5jb25uZWN0KGdhaW5Ob2RlKTtcclxuXHJcblx0XHRvc2Muc3RhcnQoMCk7Ki9cclxuXHR9XHJcblxyXG59KTtcclxuXHJcblxyXG4iXSwiZmlsZSI6Im1haW4uanMiLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ==
+}).call(this,require("1YiZ5S"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../node_modules/gulp-browserify/node_modules/browserify/node_modules/process/browser.js","/../node_modules/gulp-browserify/node_modules/browserify/node_modules/process")
+},{"1YiZ5S":9,"buffer":6}]},{},[1])
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiIiwic291cmNlcyI6WyJtYWluLmpzIl0sInNvdXJjZXNDb250ZW50IjpbInZhciBTb25pY1NvY2tldCA9IHJlcXVpcmUoJy4uL2xpYi93YXRlcmplZi9zb25pYy1zb2NrZXQuanMnKTtcbnZhciBTb25pY1NlcnZlciA9IHJlcXVpcmUoJy4uL2xpYi93YXRlcmplZi9zb25pYy1zZXJ2ZXIuanMnKTtcbnZhciBTb25pY0NvZGVyID0gcmVxdWlyZSgnLi4vbGliL3dhdGVyamVmL3NvbmljLWNvZGVyLmpzJyk7XG5cblxuZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcihcIkRPTUNvbnRlbnRMb2FkZWRcIiwgZnVuY3Rpb24oZXZlbnQpIHsgXG4gIC8vZG8gd29ya1xuXHQvL3ZhciBBTFBIQUJFVCA9ICcwMTIzNDU2Nzg5Jztcblx0Ly92YXIgTUVTU0FHRSA9ICcxJztcblxuXHR2YXIgYnV0dG9uID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI21lc3NhZ2UnKTtcblx0YnV0dG9uLmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJywgb25CdXR0b24pO1xuXHR2YXIgYnV0dG9uU3RvcCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJyNzdG9wJyk7XG5cdGJ1dHRvblN0b3AuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCBvbkJ1dHRvblN0b3ApO1xuXG5cdHZhciBzbGlkZXIgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjc2xpZGVyJyk7XG5cdHNsaWRlci5hZGRFdmVudExpc3RlbmVyKCdjaGFuZ2UnLCBvbkNoYW5nZSk7XG5cblx0dmFyIHN0YXRlID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI3N0YXRlJyk7XG5cdHZhciB2YWx1ZSA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJyN2YWx1ZScpO1xuXG5cdGZ1bmN0aW9uIG9uQnV0dG9uKCkge1xuXHRcdHN0YXRlLmlubmVySFRNTCA9ICdFbW1pc3Npb24nO1xuXHRcdHNlbmRGcmVxKCk7ICBcblx0fVxuXG5cdGZ1bmN0aW9uIG9uQnV0dG9uU3RvcCgpIHtcblx0XHRpZiAob3NjaWxsYXRvcil7XG5cdFx0XHRvc2NpbGxhdG9yLnN0b3AoKTtcblx0XHRcdHN0YXRlLmlubmVySFRNTCA9ICdTdG9wIEVtbWlzc2lvbic7XG5cdFx0fVxuXHR9XG5cblx0ZnVuY3Rpb24gb25DaGFuZ2UoKXtcblx0XHR2YWx1ZS5pbm5lckhUTUwgPSBzbGlkZXIudmFsdWU7XG5cdH1cblxuXHQvLyBPbiBzb21lIG90aGVyIG1hY2hpbmU6XG5cdC8vc3NlcnZlciA9IG5ldyBTb25pY1NlcnZlcih7YWxwaGFiZXQ6IEFMUEhBQkVUfSk7XG5cdC8vc3NlcnZlci5vbignbWVzc2FnZScsIGZ1bmN0aW9uKG1lc3NhZ2UpIHtcblx0ICAvLyBtZXNzYWdlIGlzICczMTQxNScuIERvIHNvbWV0aGluZyB3aXRoIGl0LlxuXHQvLyAgY29uc29sZS5sb2cobWVzc2FnZSk7XG5cdC8vfSk7XG5cdC8vc3NlcnZlci5zdGFydCgpO1xuXG5cblx0dmFyIGF1ZGlvQ29udGV4dCA9IHdpbmRvdy5hdWRpb0NvbnRleHQgfHwgbmV3IHdlYmtpdEF1ZGlvQ29udGV4dCgpO1xuXG5cblx0ZnVuY3Rpb24gc2VuZEZyZXEoKXtcblxuXHRcdGNvbnRleHQgPSBhdWRpb0NvbnRleHQ7XG5cdFx0b3NjaWxsYXRvciA9IGNvbnRleHQuY3JlYXRlT3NjaWxsYXRvcigpO1xuXHRcdG9zY2lsbGF0b3IuZnJlcXVlbmN5LnZhbHVlID0gc2xpZGVyLnZhbHVlO1xuXG5cdFx0b3NjaWxsYXRvci5jb25uZWN0KGNvbnRleHQuZGVzdGluYXRpb24pO1xuXG5cdFx0b3NjaWxsYXRvci5zdGFydCgwKTtcblxuXHRcdHNldFRpbWVvdXQoZnVuY3Rpb24oKSB7XG5cdFx0XHRvc2NpbGxhdG9yLnN0b3AoKTtcblx0XHRcdHN0YXRlLmlubmVySFRNTCA9ICdTdG9wIEVtbWlzc2lvbic7XG5cdFx0fSwgMTAwMDApO1xuXG5cdFx0Lyp2YXIgZ2Fpbk5vZGUgPSBhdWRpb0NvbnRleHQuY3JlYXRlR2FpbigpO1xuXHRcdC8vIEdhaW4gPT4gTWVyZ2VyXG5cdFx0Z2Fpbk5vZGUuZ2Fpbi52YWx1ZSA9IDE7XG5cblx0XHRnYWluTm9kZS5nYWluLnNldFZhbHVlQXRUaW1lKDEsIDApO1xuXHRcdC8vZ2Fpbk5vZGUuZ2Fpbi5saW5lYXJSYW1wVG9WYWx1ZUF0VGltZSgxLCBzdGFydFRpbWUgKyB0aGlzLnJhbXBEdXJhdGlvbik7XG5cdFx0Ly9nYWluTm9kZS5nYWluLnNldFZhbHVlQXRUaW1lKDEsIHN0YXJ0VGltZSArIGR1cmF0aW9uIC0gdGhpcy5yYW1wRHVyYXRpb24pO1xuXHRcdC8vZ2Fpbk5vZGUuZ2Fpbi5saW5lYXJSYW1wVG9WYWx1ZUF0VGltZSgwLCBzdGFydFRpbWUgKyBkdXJhdGlvbik7XG5cblx0XHRnYWluTm9kZS5jb25uZWN0KGF1ZGlvQ29udGV4dC5kZXN0aW5hdGlvbik7XG5cblx0XHR2YXIgb3NjID0gYXVkaW9Db250ZXh0LmNyZWF0ZU9zY2lsbGF0b3IoKTtcblx0XHRvc2MuZnJlcXVlbmN5LnZhbHVlID0gMTkwMDA7XG5cdFx0b3NjLmNvbm5lY3QoZ2Fpbk5vZGUpO1xuXG5cdFx0b3NjLnN0YXJ0KDApOyovXG5cdH1cblxufSk7XG5cblxuIl0sImZpbGUiOiJtYWluLmpzIiwic291cmNlUm9vdCI6Ii9zb3VyY2UvIn0=
