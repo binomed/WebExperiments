@@ -9,6 +9,28 @@ deviceName = "Makeblock_LE";
 serviceUUID = "0000ffe1-0000-1000-8000-00805f9b34fb";
 characteristicWriteUUID = "0000ffe3-0000-1000-8000-00805f9b34fb";
 
+const TYPE_MOTOR = 10,
+	TYPE_RGB = 8,
+	TYPE_SOUND = 7;
+
+var picker;
+
+function  updatePicker(pickerUpdate){
+	picker = pickerUpdate;
+}
+
+
+const PORT_1 = 0x01,
+	PORT_2 = 0x02,
+	PORT_3 = 0x03,
+	PORT_4 = 0x04,
+	PORT_5 = 0x05,
+	PORT_6 = 0x06,
+	PORT_7 = 0x07,
+	PORT_8 = 0x08,
+	M_1 = 0x09,
+	M_2 = 0x0a;
+
 function ab2str(buf) {
   return String.fromCharCode.apply(null, new Uint16Array(buf));
 }
@@ -68,6 +90,20 @@ function pageLoad(){
 		processCharacteristic(false);
 	});
 
+	document.getElementById('color').addEventListener('click', function(){
+		var valueArray = [0,0,0];
+		if (picker){
+			valueArray[0] = picker.rgb[0];
+			valueArray[1] = picker.rgb[1];
+			valueArray[2] = picker.rgb[2];
+		}
+		var rHex = valueArray[0]<<8;
+		var gHex = valueArray[1]<<16;
+		var bHex = valueArray[2]<<24;
+		var value = rHex | gHex | bHex;
+		processCharacteristic(true, genericControl(TYPE_RGB,PORT_6,0,value));
+	});
+
 
 	document.getElementById('m11').addEventListener('click', function(){
 		//completeWriteOperation();
@@ -110,6 +146,94 @@ function getService(){
 			});
 		}
 	});
+}
+
+function genericControl(type, port, slot, value){
+	/*
+	ff 55 len idx action device port  slot  data a
+	0  1  2   3   4      5      6     7     8
+	*/
+	//unsigned char a[11]={0xff,0x55,WRITEMODULE,7,0,0,0,0,0,0,'\n'};
+    //a[4] = [type intValue];
+    //a[5] = (port<<4 & 0xf0)|(slot & 0xf);
+    // Static values
+	var buf = new ArrayBuffer(16);
+	var bufView = new Uint16Array(buf);
+	
+	var byte0 = 0xff,
+		byte1 = 0x55,
+		byte2 = 0x09,
+		byte3 = 0x00,
+		byte4 = 0x02,
+		byte5 = type.toString(16),
+		byte6 = port,
+		byte7 = slot;
+	//dynamics values
+	var byte8 = 0x00,
+		byte9 = 0x00,
+		byte10 = 0x00,
+		byte11 = 0x00;
+	//End of message
+	var byte12 = 0x0a,
+		byte13 = 0x00,
+		byte14 = 0x00,
+		byte15 = 0x00;
+
+	switch(type){
+		case TYPE_MOTOR:
+			var tempValue = value < 0 ? (parseInt("ffff",16) + Math.max(-255,value)) : Math.min(255, value);
+			byte8 = tempValue >>8;
+			byte9 = tempValue & 0x00ff;
+		break;
+		case TYPE_RGB:
+			// ff:55  09:00  02:08  06:00  5c:99  6d:00  0a
+			// 0x55ff;0x0009;0x0802;0x0006;0x995c;0x006d;0x000a;0x0000;
+			byte7 = 0x00;
+			byte8 = value>>8 & 0xff;
+			byte9 = value>>16 & 0xff;
+			byte10 = value>>24 & 0xff;
+		break;
+		case TYPE_SOUND:
+		break;
+	}
+
+	bufView[0] = byte1<<8 | byte0;
+	bufView[1] = byte3<<8 | byte2;
+	bufView[2] = byte5<<8 | byte4;
+	bufView[3] = byte7<<8 | byte6;
+	bufView[4] = byte9<<8 | byte8;
+	bufView[5] = byte11<<8 | byte10;
+	bufView[6] = byte13<<8 | byte12;
+	bufView[7] = byte15<<8 | byte14;
+	console.log(
+			byte0.toString(16)+":"+
+			byte1.toString(16)+":"+
+			byte2.toString(16)+":"+
+			byte3.toString(16)+":"+
+			byte4.toString(16)+":"+
+			byte5.toString(16)+":"+
+			byte6.toString(16)+":"+
+			byte7.toString(16)+":"+
+			byte8.toString(16)+":"+
+			byte9.toString(16)+":"+
+			byte10.toString(16)+":"+
+			byte11.toString(16)+":"+
+			byte12.toString(16)+":"+
+			byte13.toString(16)+":"+
+			byte14.toString(16)+":"+
+			byte15.toString(16)+":"
+			);
+	console.log(
+			bufView[0].toString(16)+":"+
+			bufView[1].toString(16)+":"+
+			bufView[2].toString(16)+":"+
+			bufView[3].toString(16)+":"+
+			bufView[4].toString(16)+":"+
+			bufView[5].toString(16)+":"+
+			bufView[6].toString(16)+":"+
+			bufView[7].toString(16)
+			);
+	return buf;
 }
 
 function getMotorInfo(indexMotor, indexInstruction){
@@ -157,14 +281,14 @@ function getMotorInfo(indexMotor, indexInstruction){
 	return buf;
 }
 
-function processCharacteristic(write, motor, instruction){
+function processCharacteristic(write, value){
 	getService()
 	.then(function(service){
 		console.log("Try to get Characteritic : %O",service);
 		return service.getCharacteristic(characteristicWriteUUID);
 	}).then(function(characteristic){
 		if (write){			
-			if (!motor && !instruction){
+			if (!value){
 			console.log("Try to write value : %O",characteristic);
 			var writeValue = str2ab("test");
 			write= encoder.encode("ff:55:09:00:02:08:06:00:5c:99:6d:00:0a");
@@ -189,7 +313,7 @@ function processCharacteristic(write, motor, instruction){
 
 			// Led
 			buf = new ArrayBuffer(16);
-			bufView = new Uint16Array(buf);
+			bufView = new Uint16Array(buf);			
 			bufView[0] = 0x55ff;
 			bufView[1] = 0x0009;
 			bufView[2] = 0x0802;
@@ -200,6 +324,17 @@ function processCharacteristic(write, motor, instruction){
 			bufView[7] = 0x0000;
 			write = buf;
 
+			console.log(
+				bufView[0].toString(16)+":"+
+				bufView[1].toString(16)+":"+
+				bufView[2].toString(16)+":"+
+				bufView[3].toString(16)+":"+
+				bufView[4].toString(16)+":"+
+				bufView[5].toString(16)+":"+
+				bufView[6].toString(16)+":"+
+				bufView[7].toString(16)
+				);
+
 			// Motor M1
 			//"ff:55:09:00:02:0a:09:64:00:00:00:00:0a" 
 			//"ff:55:09:00:02:0a:09:00:00:00:00:00:0a"
@@ -208,7 +343,7 @@ function processCharacteristic(write, motor, instruction){
 			// ff:55:09:00:02:0a:0a:64:00:00:00:00:0a
 			// ff:55:09:00:02:0a:0a:00:00:00:00:00:0a
 			// ff:55:09:00:02:0a:0a:9c:ff:00:00:00:0a
-			buf = new ArrayBuffer(16);
+			/*buf = new ArrayBuffer(16);
 			bufView = new Uint16Array(buf);
 			bufView[0] = 0x55ff;
 			bufView[1] = 0x0009;
@@ -217,11 +352,11 @@ function processCharacteristic(write, motor, instruction){
 			bufView[4] = 0x00ff;
 			bufView[5] = 0x0000;
 			bufView[6] = 0x000a;
-			bufView[7] = 0x0000;
-			write = buf;
+			bufView[7] = 0x0000;*/
+			//write = buf;
 			return characteristic.writeValue(write);
 			}else{
-				return characteristic.writeValue(getMotorInfo(motor, instruction));
+				return characteristic.writeValue(value);
 			}
 		}else{
 			return characteristic.readValue();
