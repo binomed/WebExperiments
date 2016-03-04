@@ -11,7 +11,7 @@ var reload = browserSync.reload;
 
 gulp.task('serve',  ['browserify','less'], function(){
   browserSync.init({
-    server:'./'
+    server:'./',
   });
   gulp.watch("less/**/*.less", ['less']);
   gulp.watch("./**/*.html").on('change', reload);
