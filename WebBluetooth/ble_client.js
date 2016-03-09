@@ -13,6 +13,8 @@ const TYPE_MOTOR = 0x0a,
 	TYPE_RGB = 0x08,
 	TYPE_SOUND = 0x07;
 
+var charArray = [];
+
 var picker;
 
 function  updatePicker(pickerUpdate){
@@ -106,29 +108,20 @@ function pageLoad(){
 
 
 	document.getElementById('up').addEventListener('click', function(){
-		//completeWriteOperation();
-		processCharacteristic(true,genericControl(TYPE_MOTOR, M_1, 0, 100));
-		processCharacteristic(true,genericControl(TYPE_MOTOR, M_2, 0, 100));
+		processMotors(-100,100);
+		
 	});
 	document.getElementById('down').addEventListener('click', function(){
-		//completeWriteOperation();
-		processCharacteristic(true,genericControl(TYPE_MOTOR, M_1, 0, -100));
-		processCharacteristic(true,genericControl(TYPE_MOTOR, M_2, 0, -100));
+		processMotors(100,-100);
 	});
 	document.getElementById('stop').addEventListener('click', function(){
-		//completeWriteOperation();
-		processCharacteristic(true,genericControl(TYPE_MOTOR, M_1, 0, 0));
-		processCharacteristic(true,genericControl(TYPE_MOTOR, M_2, 0, 0));
+		processMotors(0,0);		
 	});
 	document.getElementById('left').addEventListener('click', function(){
-		//completeWriteOperation();
-		processCharacteristic(true,genericControl(TYPE_MOTOR, M_1, 0, 100));
-		processCharacteristic(true,genericControl(TYPE_MOTOR, M_2, 0, -100));
+		processMotors(100,100);
 	});
 	document.getElementById('right').addEventListener('click', function(){
-		//completeWriteOperation();
-		processCharacteristic(true,genericControl(TYPE_MOTOR, M_1, 0, -100));
-		processCharacteristic(true,genericControl(TYPE_MOTOR, M_2, 0, 100));
+		processMotors(-100,-100);
 	});
 	/*document.getElementById('m23').addEventListener('click', function(){
 		//completeWriteOperation();
@@ -136,6 +129,22 @@ function pageLoad(){
 	});*/
 
 }
+
+function processMotors(valueM1, valueM2){
+	getCharacteristic()
+	.then(characteristic =>{
+		return characteristic.writeValue(genericControl(TYPE_MOTOR, M_1, 0, valueM1));
+	}).then(()=>{
+		return charArray[characteristicWriteUUID].writeValue(genericControl(TYPE_MOTOR, M_2, 0, valueM2));
+	}).then(()=>{
+		document.querySelector('#output').textContent = 'Write Datas ! ';
+		console.info("Write datas ! ");
+	}).catch(error =>{
+		console.error(error);
+		document.querySelector('#output').textContent = `Error :  ${error}`;
+	});
+}
+
 
 function getService(){
 	return new Promise(function(resolve, reject){
@@ -196,8 +205,9 @@ function genericControl(type, port, slot, value){
 			// ff:55:09:00:02:0a:0a:00:00:00:00:00:0a
 			// ff:55:09:00:02:0a:0a:9c:ff:00:00:00:0a
 			var tempValue = value < 0 ? (parseInt("ffff",16) + Math.max(-255,value)) : Math.min(255, value);
-			byte7 = tempValue & 0x00ff;
+			byte7 = tempValue & 0x00ff;			
 			byte8 = 0x00;
+			byte8 = tempValue >>8; 
 
 			/*byte5 = 0x0a;
 			byte6 = 0x09;
@@ -301,83 +311,31 @@ function getMotorInfo(indexMotor, indexInstruction){
 	return buf;
 }
 
-function processCharacteristic(write, value){
-	getService()
-	.then(function(service){
-		console.log("Try to get Characteritic : %O",service);
-		return service.getCharacteristic(characteristicWriteUUID);
-	}).then(function(characteristic){
+function getCharacteristic(){
+	return new Promise(function(resolve, reject){
+		getService()
+		.then(service =>{
+			return service.getCharacteristic(characteristicWriteUUID);
+		})
+		.then(characteristic =>{
+			charArray[characteristicWriteUUID] = characteristic
+			resolve(characteristic);
+		}).catch(error =>{
+			reject(eror);
+		});	
+	});
+	
+}
+
+
+
+function processCharacteristic(write, value){	
+	getCharacteristic().then(function(characteristic){
 		if (write){			
-			if (!value){
-			console.log("Try to write value : %O",characteristic);
-			var writeValue = str2ab("test");
-			write= encoder.encode("ff:55:09:00:02:08:06:00:5c:99:6d:00:0a");
-			write= encoder.encode("ff550900020806005c996d000a");
-			//write = str2ab("ff550900020806005c996d000a");
-			var buf = new ArrayBuffer(14);
-			var bufView = new Uint16Array(buf);
-			bufView[0] = 0xff;
-			bufView[1] = 0x55;
-			bufView[2] = 0x09;
-			bufView[3] = 0x00;
-			bufView[4] = 0x02;
-			bufView[5] = 0x08;
-			bufView[6] = 0x06;
-			bufView[7] = 0x00;
-			bufView[8] = 0x5c;
-			bufView[9] = 0x99;
-			bufView[10] = 0x6d;
-			bufView[11] = 0x00;
-			bufView[12] = 0x0a;
-			bufView[13] = 0x00;
-
-			// Led
-			buf = new ArrayBuffer(16);
-			bufView = new Uint16Array(buf);			
-			bufView[0] = 0x55ff;
-			bufView[1] = 0x0009;
-			bufView[2] = 0x0802;
-			bufView[3] = 0x0006;
-			bufView[4] = 0x995c;
-			bufView[5] = 0x006d;
-			bufView[6] = 0x000a;
-			bufView[7] = 0x0000;
-			write = buf;
-
-			console.log(
-				bufView[0].toString(16)+":"+
-				bufView[1].toString(16)+":"+
-				bufView[2].toString(16)+":"+
-				bufView[3].toString(16)+":"+
-				bufView[4].toString(16)+":"+
-				bufView[5].toString(16)+":"+
-				bufView[6].toString(16)+":"+
-				bufView[7].toString(16)
-				);
-
-			// Motor M1
-			//"ff:55:09:00:02:0a:09:64:00:00:00:00:0a" 
-			//"ff:55:09:00:02:0a:09:00:00:00:00:00:0a"
-			// ff:55:09:00:02:0a:09:9c:ff:00:00:00:0a
-			// Motor M2
-			// ff:55:09:00:02:0a:0a:64:00:00:00:00:0a
-			// ff:55:09:00:02:0a:0a:00:00:00:00:00:0a
-			// ff:55:09:00:02:0a:0a:9c:ff:00:00:00:0a
-			/*buf = new ArrayBuffer(16);
-			bufView = new Uint16Array(buf);
-			bufView[0] = 0x55ff;
-			bufView[1] = 0x0009;
-			bufView[2] = 0x0a02;
-			bufView[3] = 0x090a;
-			bufView[4] = 0x00ff;
-			bufView[5] = 0x0000;
-			bufView[6] = 0x000a;
-			bufView[7] = 0x0000;*/
-			//write = buf;
-			return characteristic.writeValue(write);
-			}else{
-				return characteristic.writeValue(value);
-			}
+			if (Array.isArray(value)){
+				value.for
+			}	
+			return characteristic.writeValue(value);
 		}else{
 			return characteristic.readValue();
 		}
