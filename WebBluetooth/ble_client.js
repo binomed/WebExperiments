@@ -9,9 +9,9 @@ deviceName = "Makeblock_LE";
 serviceUUID = "0000ffe1-0000-1000-8000-00805f9b34fb";
 characteristicWriteUUID = "0000ffe3-0000-1000-8000-00805f9b34fb";
 
-const TYPE_MOTOR = 10,
-	TYPE_RGB = 8,
-	TYPE_SOUND = 7;
+const TYPE_MOTOR = 0x0a,
+	TYPE_RGB = 0x08,
+	TYPE_SOUND = 0x07;
 
 var picker;
 
@@ -50,7 +50,7 @@ var serverGATT = null,
 function initBle(){
 	return new Promise(function(resolve, reject){
 		navigator.bluetooth.requestDevice({ 
-			filters: [{ name: deviceName }]
+			filters: [{ name: deviceName }], optionalServices: [serviceUUID]
 		})
 		.then(function(device) {
 		   document.querySelector('#output').textContent = 'connecting...';
@@ -105,30 +105,35 @@ function pageLoad(){
 	});
 
 
-	document.getElementById('m11').addEventListener('click', function(){
+	document.getElementById('up').addEventListener('click', function(){
 		//completeWriteOperation();
-		processCharacteristic(true,1,1);
+		processCharacteristic(true,genericControl(TYPE_MOTOR, M_1, 0, 100));
+		processCharacteristic(true,genericControl(TYPE_MOTOR, M_2, 0, 100));
 	});
-	document.getElementById('m12').addEventListener('click', function(){
+	document.getElementById('down').addEventListener('click', function(){
 		//completeWriteOperation();
-		processCharacteristic(true,1,2);
+		processCharacteristic(true,genericControl(TYPE_MOTOR, M_1, 0, -100));
+		processCharacteristic(true,genericControl(TYPE_MOTOR, M_2, 0, -100));
 	});
-	document.getElementById('m13').addEventListener('click', function(){
+	document.getElementById('stop').addEventListener('click', function(){
 		//completeWriteOperation();
-		processCharacteristic(true,1,3);
+		processCharacteristic(true,genericControl(TYPE_MOTOR, M_1, 0, 0));
+		processCharacteristic(true,genericControl(TYPE_MOTOR, M_2, 0, 0));
 	});
-	document.getElementById('m21').addEventListener('click', function(){
+	document.getElementById('left').addEventListener('click', function(){
 		//completeWriteOperation();
-		processCharacteristic(true,2,1);
+		processCharacteristic(true,genericControl(TYPE_MOTOR, M_1, 0, 100));
+		processCharacteristic(true,genericControl(TYPE_MOTOR, M_2, 0, -100));
 	});
-	document.getElementById('m22').addEventListener('click', function(){
+	document.getElementById('right').addEventListener('click', function(){
 		//completeWriteOperation();
-		processCharacteristic(true,2,2);
+		processCharacteristic(true,genericControl(TYPE_MOTOR, M_1, 0, -100));
+		processCharacteristic(true,genericControl(TYPE_MOTOR, M_2, 0, 100));
 	});
-	document.getElementById('m23').addEventListener('click', function(){
+	/*document.getElementById('m23').addEventListener('click', function(){
 		//completeWriteOperation();
 		processCharacteristic(true,2,3);
-	});
+	});*/
 
 }
 
@@ -165,7 +170,7 @@ function genericControl(type, port, slot, value){
 		byte2 = 0x09,
 		byte3 = 0x00,
 		byte4 = 0x02,
-		byte5 = type.toString(16),
+		byte5 = type,
 		byte6 = port,
 		byte7 = slot;
 	//dynamics values
@@ -181,9 +186,24 @@ function genericControl(type, port, slot, value){
 
 	switch(type){
 		case TYPE_MOTOR:
+			// Motor M1
+			// ff:55  09:00  02:0a  09:64  00:00  00:00  0a"
+			// 0x55ff;0x0009;0x0a02;0x0964;0x0000;0x0000;0x000a;0x0000;
+			//"ff:55:09:00:02:0a:09:00:00:00:00:00:0a"
+			// ff:55:09:00:02:0a:09:9c:ff:00:00:00:0a
+			// Motor M2
+			// ff:55:09:00:02:0a:0a:64:00:00:00:00:0a
+			// ff:55:09:00:02:0a:0a:00:00:00:00:00:0a
+			// ff:55:09:00:02:0a:0a:9c:ff:00:00:00:0a
 			var tempValue = value < 0 ? (parseInt("ffff",16) + Math.max(-255,value)) : Math.min(255, value);
-			byte8 = tempValue >>8;
-			byte9 = tempValue & 0x00ff;
+			byte7 = tempValue & 0x00ff;
+			byte8 = 0x00;
+
+			/*byte5 = 0x0a;
+			byte6 = 0x09;
+			byte7 = 0x64;
+			byte8 = 0x00;*/
+			
 		break;
 		case TYPE_RGB:
 			// ff:55  09:00  02:08  06:00  5c:99  6d:00  0a
