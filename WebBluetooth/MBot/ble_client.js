@@ -125,7 +125,19 @@ function pageLoad(){
 	});
 	
 	document.getElementById('sound').addEventListener('click', function(){
-		processCharacteristic(true, genericControl(TYPE_SOUND,PORT_6,0,value));
+		getCharacteristic()
+		.then(characteristic =>{
+			return characteristic.writeValue(genericControl(TYPE_SOUND,PORT_6,0,0));
+		}).then(()=>{
+			return charArray[characteristicWriteUUID].writeValue(genericControl(TYPE_SOUND,PORT_6,0,1));
+		}).then(()=>{
+			document.querySelector('#output').textContent = 'Write Datas ! ';
+			console.info("Write datas ! ");
+		}).catch(error =>{
+			console.error(error);
+			document.querySelector('#output').textContent = `Error :  ${error}`;
+		});
+		//processCharacteristic(true, genericControl(TYPE_SOUND,PORT_6,0,0));
 	});
 	/*document.getElementById('m23').addEventListener('click', function(){
 		//completeWriteOperation();
@@ -229,12 +241,25 @@ function genericControl(type, port, slot, value){
 		break;
 		case TYPE_SOUND:
 			//ff:55:05:00:02:22:00:00:0a
+			//ff:55:05:00:02:22:06:01:0a
+			//ff:55:05:00:02:22:ee:01:0a
+			//ff:55:05:00:02:22:88:01:0a
+			//ff:55:05:00:02:22:b8:01:0a
+			//ff:55:05:00:02:22:5d:01:0a
+			//ff:55:05:00:02:22:4a:01:0a
+			//ff:55:05:00:02:22:26:01:0a
 			byte3 = 0x05;
 			byte4 = 0x00;
 			byte5 = 0x02;
 			byte6 = 0x22;
-			byte7 = 0x00;
-			byte8 = 0x00;
+			if (value === 0){
+				byte7 = 0x00;
+				byte8 = 0x00;
+			}else{
+
+				byte7 = 0xee;
+				byte8 = 0x01;
+			}
 			byte9 = 0x0a;
 			byte12= 0x00;
 
