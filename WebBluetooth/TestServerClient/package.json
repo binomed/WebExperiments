@@ -1,0 +1,8 @@
+{
+  "author": "JefBinomed",
+  "name": "WebExperiment-Ble",
+  "version": "1.0.0",
+  "devDependencies": {
+    "bleno": "^0.3.3"
+  }
+}
