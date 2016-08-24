@@ -3,7 +3,21 @@ function pageLoad(){
 	document.getElementById('nfcRead').addEventListener('click', function(){
 		processNfc();
 	});
+
+  document.getElementById('nfcPush').addEventListener('click', function(){
+    pushNfc();
+  });
 	
+}
+
+function pushNfc(){
+  navigator.nfc.push({
+    data: [{ recordType: "url", data: "https://jef.binomed.fr" }]
+  }).then(() => {
+    console.log("Message pushed.");
+  }).catch((error) => {
+    console.log("Push failed :-( try again.");
+  });
 }
 
 function processMessage(message) {
