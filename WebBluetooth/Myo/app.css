@@ -8,6 +8,9 @@ html, body {
   align-items: center;
 }
 
+section{
+	padding: 20px;
+}
 
 .console{
 	background-color: #EFEFEF;

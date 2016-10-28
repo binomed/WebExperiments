@@ -55,30 +55,80 @@ const shape = {
 
     function pageLoad() {
         document.getElementById('connect').addEventListener('click', () => {
-            navigator.bluetooth.requestDevice({
-                    filters: [{
-                        services: [controlService]
-                    },{
-                    	services: [gestureService]
-                    }],
-                    optionalServices: [controlService, gestureService]
-                })
+            devicePromise = navigator.bluetooth.requestDevice(shape);
+
+            gattPromise = devicePromise.then(function(device) {
+                    document.querySelector('.console').textContent = 'connecting...';
+                    currentDevice = device;
+                    return device.gatt.connect();
+                });
+                
+                /*.then((server) => {
+                    document.querySelector('.console').textContent += '\n server connected'; 
+                    return currentDevice.gatt.getPrimaryService(controlService)
+                });*/
+        });
+        document.getElementById('getControlService').addEventListener('click', ()=>{
+            gestureServicePromise = gattPromise.then(gatt => {
+                document.querySelector('.console').textContent = 'Try to get Gesture'; 
+                return gatt.getPrimaryService(gestureService)
+            });
+        });
+
+        document.getElementById('getChar').addEventListener('click', ()=>{
+            gestureServicePromise.then(service=>{
+                document.querySelector('.console').textContent = 'Try to get characteristic';
+                return service.getCharacteristic(gestureCharacteristic)
+            });
+
+        });
+        document.getElementById('all').addEventListener('click', ()=>{
+            navigator.bluetooth.requestDevice(shape)
                 .then(function(device) {
+                    console.info('Get Device, ', device);
+                    console.info('Try to connecting');
                     document.querySelector('.console').textContent = 'connecting...';
                     currentDevice = device;
                     return device.gatt.connect();
                 })
-                .then((server) => { console.log('server connected'); return currentDevice.gatt.getPrimaryService(controlService)})
-                .then((service) => { console.log('control service retrieve'); return service.getCharacteristic(commandCharacteristic)})
-                .then((characteristic) => { console.log('command characteristic retrieve'); return characteristic.writeValue(enableGesturesCommand)})
-                .then(() => { console.log('characteristic write'); return currentDevice.gatt.getPrimaryService(gestureService)})
-                .then((service) => { console.log('gesture service retrieve'); return service.getCharacteristic(gestureCharacteristic)})
+                .then(()=>{
+                    console.info('Connect to myo device');
+                    console.info('Try to get Control Service');
+                    document.querySelector('.console').textContent = 'Try to get Control service'; 
+                    return currentDevice.gatt.getPrimaryService(controlService)
+                })      
+                .then((service) => { 
+                    console.info('Get Control Service');
+                    console.info('try to get command characteristic');
+                    document.querySelector('.console').textContent = 'control service retrieve'; 
+                    return service.getCharacteristic(commandCharacteristic)
+                })
+                .then((characteristic) => { 
+                    console.info('Get command characteristic');
+                    console.info('try to write enable gesture command');
+                    document.querySelector('.console').textContent += '\n command characteristic retrieve'; 
+                    return characteristic.writeValue(enableGesturesCommand)
+                })
+                .then(() => {
+                    console.info('Try to get Gesture Service');
+                    document.querySelector('.console').textContent = 'Try to get Gesture service'; 
+                    return currentDevice.gatt.getPrimaryService(gestureService)
+                })
+                .then(service=>{
+                    console.info('Get Gesture Service');
+                    console.info('try to get Gesture characteristic');
+                    document.querySelector('.console').textContent = 'Try to get Gesture characteristic';
+                    return service.getCharacteristic(gestureCharacteristic)
+                })
                 .then((characteristic) => {
-                	console.log('characteristic retrieve');
+                    console.info('Get gesture caracteristic');
+                    console.info('try to listen gestures !');
+                	document.querySelector('.console').textContent += '\ncharacteristic retrieve';
                     characteristic.startNotifications();
                     characteristic.addEventListener('characteristicvaluechanged', (ev) => {
                         const gesture = parseMyoGesture(ev.target.value);
-                        document.querySelector('.console').textContent = `Gesture : ${gesture}`;
+                        console.info('Gesture : ', gesture);
+                        document.querySelector('.console').textContent = `Gesture : ${gesture.gesture}`;
                     })
                 }).catch(function(error) {
                     console.error(error);
