@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Test Presentation Api</title>
+	<link rel="stylesheet" type="text/css" href="app.css">
+	<!--<meta name="HandheldFriendly" content="true" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="apple-mobile-web-app-title" content="Phaser App">-->
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+</head>
+
+<body>
+	<p>
+		<button id="createRequest">new PresentationRequest()</button>
+	</p>
+	<p>
+		<button id="start" disabled>presentationRequest.start()</button>
+	</p>
+	<p>
+		<input id="presentationId" type="text" placeholder="presentationId">
+		<button id="reconnect" disabled>presentationRequest.reconnect(presentationId)</button>
+	</p>
+	<p>
+		<button id="close" disabled>presentationRequest.close()</button>
+		<button id="terminate" disabled>presentationRequest.terminate()</button>
+	</p>
+
+	<p id="output"></p>
+	<script src="./presentation.js"></script>
+</body>
+
+</html>
