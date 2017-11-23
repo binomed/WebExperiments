@@ -21,7 +21,8 @@ deepSleepCommand[0] = 0x04; // set mode
 deepSleepCommand[1] = 0x00; // bytes in payload
 
 const shape = {
-    filters: [{
+    filters: [
+        {name: 'JefMyo'},{
         services: [controlService],
     }],
     optionalServices: [gestureService],
@@ -62,15 +63,15 @@ const shape = {
                     currentDevice = device;
                     return device.gatt.connect();
                 });
-                
+
                 /*.then((server) => {
-                    document.querySelector('.console').textContent += '\n server connected'; 
+                    document.querySelector('.console').textContent += '\n server connected';
                     return currentDevice.gatt.getPrimaryService(controlService)
                 });*/
         });
         document.getElementById('getControlService').addEventListener('click', ()=>{
             gestureServicePromise = gattPromise.then(gatt => {
-                document.querySelector('.console').textContent = 'Try to get Gesture'; 
+                document.querySelector('.console').textContent = 'Try to get Gesture';
                 return gatt.getPrimaryService(gestureService)
             });
         });
@@ -94,24 +95,24 @@ const shape = {
                 .then(()=>{
                     console.info('Connect to myo device');
                     console.info('Try to get Control Service');
-                    document.querySelector('.console').textContent = 'Try to get Control service'; 
+                    document.querySelector('.console').textContent = 'Try to get Control service';
                     return currentDevice.gatt.getPrimaryService(controlService)
-                })      
-                .then((service) => { 
+                })
+                .then((service) => {
                     console.info('Get Control Service');
                     console.info('try to get command characteristic');
-                    document.querySelector('.console').textContent = 'control service retrieve'; 
+                    document.querySelector('.console').textContent = 'control service retrieve';
                     return service.getCharacteristic(commandCharacteristic)
                 })
-                .then((characteristic) => { 
+                .then((characteristic) => {
                     console.info('Get command characteristic');
                     console.info('try to write enable gesture command');
-                    document.querySelector('.console').textContent += '\n command characteristic retrieve'; 
+                    document.querySelector('.console').textContent += '\n command characteristic retrieve';
                     return characteristic.writeValue(enableGesturesCommand)
                 })
                 .then(() => {
                     console.info('Try to get Gesture Service');
-                    document.querySelector('.console').textContent = 'Try to get Gesture service'; 
+                    document.querySelector('.console').textContent = 'Try to get Gesture service';
                     return currentDevice.gatt.getPrimaryService(gestureService)
                 })
                 .then(service=>{
@@ -134,6 +135,50 @@ const shape = {
                     console.error(error);
                     document.querySelector('.console').textContent = `Error ! `;
                 });
+        });
+        document.getElementById('allAsync').addEventListener('click', async ()=>{
+            try{
+                const device = await navigator.bluetooth.requestDevice(shape);
+
+                console.info('Get Device, ', device);
+                console.info('Try to connecting');
+                document.querySelector('.console').textContent = 'connecting...';
+                const server = await device.gatt.connect();
+                    console.info('Connect to myo device');
+                    console.info('Try to get Control Service');
+                    document.querySelector('.console').textContent = 'Try to get Control service';
+                const realControlService = await server.getPrimaryService(controlService)
+                    console.info('Get Control Service');
+                    console.info('try to get command characteristic');
+                    document.querySelector('.console').textContent = 'control service retrieve';
+                const realCommandChar = await realControlService.getCharacteristic(commandCharacteristic)
+                    console.info('Get command characteristic');
+                    console.info('try to write enable gesture command');
+                    document.querySelector('.console').textContent += '\n command characteristic retrieve';
+                await realCommandChar.writeValue(enableGesturesCommand)
+                    console.info('Try to get Gesture Service');
+                    document.querySelector('.console').textContent = 'Try to get Gesture service';
+                const realGestureService = await server.getPrimaryService(gestureService)
+                    console.info('Get Gesture Service');
+                    console.info('try to get Gesture characteristic');
+                    document.querySelector('.console').textContent = 'Try to get Gesture characteristic';
+                const realGestureChar = await realGestureService.getCharacteristic(gestureCharacteristic)
+                    console.info('Get gesture caracteristic');
+                    console.info('try to listen gestures !');
+                    document.querySelector('.console').textContent += '\n characteristic retrieve';
+                    await realGestureChar.startNotifications();
+                    console.info('Notifications starts !');
+                    document.querySelector('.console').textContent += '\n Notifications starts ! ';
+                realGestureChar.addEventListener('characteristicvaluechanged', (ev) => {
+                        const gesture = parseMyoGesture(ev.target.value);
+                        console.info('Gesture : ', gesture);
+                        document.querySelector('.console').textContent = `Gesture : ${gesture.gesture}`;
+                    })
+            }catch(error){
+                console.error(error);
+                document.querySelector('.console').textContent = `Error ! `;
+            }
+
         });
     }
 
