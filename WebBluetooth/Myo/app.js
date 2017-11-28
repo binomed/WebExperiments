@@ -3,11 +3,22 @@
 // Get from https://github.com/chromakode/bicyclejs-talk/blob/07479fe3acfd722c930229d62ecadfa7ad3cdce3/src/myo.js
 
 const controlService =                  'd5060001-a904-deb9-4748-2c7f4a124842';
-const gestureService =                  'd5060003-a904-deb9-4748-2c7f4a124842';
 const myoInfoCharacteristic =           'd5060101-a904-deb9-4748-2c7f4a124842';
-const FirmwareVersionCharacteristic =   'd5060201-a904-deb9-4748-2c7f4a124842';
+const firmwareVersionCharacteristic =   'd5060201-a904-deb9-4748-2c7f4a124842';
 const commandCharacteristic =           'd5060401-a904-deb9-4748-2c7f4a124842';
+
+const gestureService =                  'd5060003-a904-deb9-4748-2c7f4a124842';
 const gestureCharacteristic =           'd5060103-a904-deb9-4748-2c7f4a124842';
+
+const ImuService =                      'd5060002-a904-deb9-4748-2c7f4a124842';
+const IMUDataCharacteristic =           'd5060402-a904-deb9-4748-2c7f4a124842';
+const MotionEventCharacteristic =       'd5060502-a904-deb9-4748-2c7f4a124842';
+
+const EmgDataService =                  'd5060005-a904-deb9-4748-2c7f4a124842';
+const EmgData0Characteristic =          'd5060105-a904-deb9-4748-2c7f4a124842';
+const EmgData1Characteristic =          'd5060205-a904-deb9-4748-2c7f4a124842';
+const EmgData2Characteristic =          'd5060305-a904-deb9-4748-2c7f4a124842';
+const EmgData3Characteristic =          'd5060405-a904-deb9-4748-2c7f4a124842';
 
 const enableGesturesCommand = new Uint8Array(5);
 enableGesturesCommand[0] = 0x01; // set mode
@@ -185,20 +196,31 @@ const shape = {
                     document.querySelector('.console').textContent = 'Try to get Control service';
                 const realControlService = await server.getPrimaryService(controlService)
                     console.info('Get Control Service');
-                    console.info('try to get command characteristic');
                     document.querySelector('.console').textContent = 'control service retrieve';
-                const realCommandChar = await realControlService.getCharacteristic(commandCharacteristic)
-                    console.info('Get command characteristic');
+                    // General informations about Myo
                     console.info('try to get myo Info characteristic');
                 const realMyoInfoChar = await realControlService.getCharacteristic(myoInfoCharacteristic);
                     console.info('Get info characteristic');
-                    document.querySelector('.console').textContent += '\n command characteristic retrieve';
                     console.info('try to get myo info values');
                 const valueMyoInfo = await realMyoInfoChar.readValue();
                     console.info('Get info characteristic values !');
                     showMyoInfos(valueMyoInfo);
+                    console.info('try to get myo firmware');
+                const realMyoFirmware = await realControlService.getCharacteristic(firmwareVersionCharacteristic);
+                    console.info('Get Firmware version characteristic');
+                    console.info('try to get myo firmware value');
+                const valueMyoFirmWare = await realMyoFirmware.readValue();
+                    console.info('Get firmware characteristic values !');
+                    showFirmwareVersion(valueMyoFirmWare);
+
+                    // Instructions to set commands
+                    console.info('try to get command characteristic');
+                const realCommandChar = await realControlService.getCharacteristic(commandCharacteristic)
+                    console.info('Get command characteristic');
+                    document.querySelector('.console').textContent += '\n command characteristic retrieve';
                     console.info('try to write enable gesture command');
-                await realCommandChar.writeValue(enableGesturesCommand)
+                await realCommandChar.writeValue(disableGesturesCommand);
+                await realCommandChar.writeValue(enableGesturesCommand);
                     console.info('Try to get Gesture Service');
                     document.querySelector('.console').textContent = 'Try to get Gesture service';
                 const realGestureService = await server.getPrimaryService(gestureService)
@@ -209,7 +231,7 @@ const shape = {
                     console.info('Get gesture caracteristic');
                     console.info('try to listen gestures !');
                     document.querySelector('.console').textContent += '\n characteristic retrieve';
-                    await realGestureChar.startNotifications();
+                await realGestureChar.startNotifications();
                     console.info('Notifications starts !');
                     document.querySelector('.console').textContent += '\n Notifications starts ! ';
                 realGestureChar.addEventListener('characteristicvaluechanged', (ev) => {
@@ -225,23 +247,37 @@ const shape = {
         });
     }
 
-    function showMyoInfos(value){
-        console.log(value);
-        console.log(value.buffer);
-        console.log(String.fromCharCode.apply(null, new Uint16Array(value)));
-        console.log(String.fromCharCode.apply(null, new Uint8Array(value)));
-        console.log(String.fromCharCode.apply(null, new Uint16Array(value.buffer)));
-        console.log(String.fromCharCode.apply(null, new Uint8Array(value.buffer)));
+    function showFirmwareVersion(value){
         try{
-            let serialNumber = value.getInt8(0);
-            let unlockPose = value.getInt16(1);
-            let activeClassifierType = value.getInt8(3);
-            let activeClassifierIndex = value.getInt8(4);
-            let hasCustomClassifier = value.getInt8(5);
-            let streamIndicating = value.getInt8(6);
-            let sku = value.getInt8(7);
+            const major = value.getUint16(0);
+            const minor = value.getUint16(2);
+            const patch = value.getUint16(4);
+            const hardwareRev = value.getUint16(6);
 
-            console.log('serialNumber', serialNumber);
+            const hardwareRevisionStr = hardwareRev === 0 ? 'Unkown' : hardwareRev === 1 ? 'alpha(rev-c)' : hardwareRev === 2 ? 'rev-d' : hardwareRev;
+
+            console.info(`Myo firmware version : ${major}.${minor}.${patch} / ${hardwareRevisionStr}`);
+        }catch(e){
+            console.error(e);
+        }
+    }
+
+    function showMyoInfos(value){
+        try{
+            let serialNumber0 = value.getUint8(0);
+            let serialNumber1 = value.getUint8(1);
+            let serialNumber2 = value.getUint8(2);
+            let serialNumber3 = value.getUint8(3);
+            let serialNumber4 = value.getUint8(4);
+            let serialNumber5 = value.getUint8(5);
+            let unlockPose = value.getUint16(6);
+            let activeClassifierType = value.getUint8(8);
+            let activeClassifierIndex = value.getUint8(9);
+            let hasCustomClassifier = value.getUint8(10);
+            let streamIndicating = value.getUint8(11);
+            let sku = value.getUint8(12);
+
+            console.log('serialNumber', serialNumber0.toString(16), serialNumber1.toString(16), serialNumber2.toString(16), serialNumber3.toString(16), serialNumber4.toString(16), serialNumber5.toString(8));
             console.log('unlockPose', unlockPose);
             console.log('activeClassifierType', activeClassifierType, activeClassifierType === 0 ? 'classifier Package' : 'user data');
             console.log('activeClassifierIndex', activeClassifierIndex);
