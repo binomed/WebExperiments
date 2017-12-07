@@ -30,6 +30,11 @@ enableGesturesCommand[4] = 0x01; // classifier mode: enabled
 const disableGesturesCommand = Uint8Array.from(enableGesturesCommand);
 disableGesturesCommand[4] = 0x00; // classifier mode: disabled
 
+const enableAllCommand = Uint8Array.from(enableGesturesCommand);
+enableAllCommand[2] = 0x01;
+enableAllCommand[3] = 0x01;
+enableAllCommand[4] = 0x01;
+
 const deepSleepCommand = new Uint8Array(2);
 deepSleepCommand[0] = 0x04; // set mode
 deepSleepCommand[1] = 0x00; // bytes in payload
@@ -79,6 +84,35 @@ const shape = {
     }],
     optionalServices: [gestureServiceUID]
 };
+
+const emgModes = {
+    NONE : 0x00,
+    EMG_FILTER : 0x02,
+    EMG_RAW : 0x03
+};
+
+const imuModes = {
+    NONE : 0x00,
+    DATA : 0x01,
+    EVENTS : 0x02,
+    ALL : 0x03,
+    RAW : 0x04
+};
+
+const classifierModes = {
+    NONE : 0x00,
+    ON : 0x01
+};
+
+function generateCommand(emgMode, imuMode, classifierMode){
+    const setCommand = new Uint8Array(5);
+    setCommand[0] = 0x01; // set mode
+    setCommand[1] = 0x03; // bytes in payload
+    setCommand[2] = emgMode; // emg mode
+    setCommand[3] = imuMode; // imu mode
+    setCommand[4] = classifierMode; // classifier mode
+    return setCommand;
+}
 
 (function() {
 
@@ -146,25 +180,10 @@ const shape = {
 
     function pageLoad() {
 
+        document.getElementById('getInfos').style.display = 'none';
+        document.getElementById('btnCommands').style.display = 'none';
 
-         document.getElementById('allAsync').addEventListener('click', async ()=>{
-            try{
-                device = await navigator.bluetooth.requestDevice(shape);
-
-                console.info('Get Device, ', device);
-                console.info('Try to connecting');
-                document.querySelector('.console').textContent = 'connecting...';
-                gattServer = await device.gatt.connect();
-                console.info('Connect to myo device');
-                document.querySelector('.console').textContent = 'Try to read myo infos';
-                await readMyoInfos();
-
-            }catch(error){
-                console.error(error);
-                document.querySelector('.console').textContent = `Error ! `;
-            }
-
-        });
+         document.getElementById('allAsync').addEventListener('click', initMyo);
 
         document.getElementById('enableGestureCommand').addEventListener('click', async () =>{
             try{
@@ -193,22 +212,119 @@ const shape = {
         });
 
         document.getElementById('getInfos').addEventListener('click', readMyoInfos);
-        document.getElementById('readGestureCharacteristic').addEventListener('click', readGesturesAndNotifications);
+        document.getElementById('readGestureCharacteristic').addEventListener('click', subscribeClassifierNotifications);
+        document.getElementById('enableAll').addEventListener('click', enableAllCommands);
     }
 
-    async function readGesturesAndNotifications(){
+    async function initMyo(){
+        try{
+            device = await navigator.bluetooth.requestDevice(shape);
+
+            console.info('Get Device, ', device);
+            console.info('Try to connecting');
+            document.querySelector('.console').textContent = 'connecting...';
+            gattServer = await device.gatt.connect();
+            console.info('Connect to myo device');
+
+            controlService =  await gattServer.getPrimaryService(controlServiceUID)
+            console.info('Get Control Service');
+            document.querySelector('.console').textContent = 'control service retrieve';
+
+
+            // Instructions to set commands
+            console.info('try to get command characteristic');
+            commandCharacteristic = await controlService.getCharacteristic(commandCharacteristicUID)
+            console.info('Get command characteristic');
+            document.querySelector('.console').textContent += '\n command characteristic retrieve';
+
+            //send init commands :
+            await commandCharacteristic.writeValue(generateCommand(emgModes.NONE, imuModes.DATA, classifierModes.ON));
+
+            // Read Myo Informations
+            document.querySelector('.console').textContent = 'Try to read myo infos';
+            await readMyoInfos();
+
+            await subscribeAll();
+
+            // force a resync
+            await commandCharacteristic.writeValue(generateCommand(emgModes.NONE, imuModes.DATA, classifierModes.NONE));
+            await commandCharacteristic.writeValue(generateCommand(emgModes.NONE, imuModes.DATA, classifierModes.ON));
+
+            document.getElementById('getInfos').style.display = '';
+            document.getElementById('btnCommands').style.display = '';
+        }catch(error){
+            console.error(error);
+            document.querySelector('.console').textContent = `Error ! `;
+        }
+    }
+
+    async function enableAllCommands(){
+        try{
+            console.info('try to write enable all commands');
+            document.querySelector('.console').textContent = 'Try to write enable all commands';
+            await commandCharacteristic.writeValue(enableAllCommand);
+            console.info('command send !');
+            document.querySelector('.console').textContent += '\n Command send';
+        }catch(e){
+            console.error(e);
+            document.querySelector('.console').textContent = `Error ! `;
+        }
+    }
+
+    async function subscribeAll(){
+        await subscribeIMUNotifications();
+        await subscribeEMGNotifications();
+        await subscribeClassifierNotifications();
+    }
+
+    async function subscribeIMUNotifications(){
+        if (!ImuDataService){
+            ImuDataService = await gattServer.getPrimaryService(ImuDataServiceUID);
+        }
+        console.info('Get IMU Service');
+        console.info('Try to get IMU Characteristic');
+        document.querySelector('.console').textContent += '\nTry to get Gesture characteristic';
+        IMUDataCharacteristic = await ImuDataService.getCharacteristic(IMUDataCharacteristicUID);
+        document.querySelector('.console').textContent += '\n characteristic retrieve';
+        console.info('Get IMU characteristic');
+        console.info('try to listen imu !');
+        await IMUDataCharacteristic.startNotifications();
+        console.info('Notifications starts !');
+        document.querySelector('.console').textContent += '\n Notifications starts ! ';
+        IMUDataCharacteristic.addEventListener('characteristicvaluechanged', handleIMUDataChanged);
+
+    }
+
+    async function subscribeEMGNotifications(){
+        if (!EmgDataService){
+            EmgDataService = await gattServer.getPrimaryService(EmgDataServiceUID);
+        }
+        console.info('Get Emg Service');
+        console.info('Try to get Emg Characteristic');
+        document.querySelector('.console').textContent += '\nTry to get Emg characteristic';
+        EmgData0Characteristic = await EmgDataService.getCharacteristic(EmgData0CharacteristicUID);
+        document.querySelector('.console').textContent += '\n characteristic retrieve';
+        console.info('Get Emg characteristic');
+        console.info('try to listen Emg !');
+        await EmgData0Characteristic.startNotifications();
+        console.info('Notifications starts !');
+        document.querySelector('.console').textContent += '\n Notifications starts ! ';
+        EmgData0Characteristic.addEventListener('characteristicvaluechanged', handleEMGDataChanged);
+    }
+
+    async function subscribeClassifierNotifications(){
         if (! gestureService){
             gestureService= await gattServer.getPrimaryService(gestureServiceUID)
         }
         console.info('Get Gesture Service');
         console.info('try to get Gesture characteristic');
-        document.querySelector('.console').textContent = 'Try to get Gesture characteristic';
+        document.querySelector('.console').textContent += '\nTry to get Gesture characteristic';
         gestureCharacteristic = await gestureService.getCharacteristic(gestureCharacteristicUID)
-        console.info('Get gesture caracteristic');
-        console.info('try to read value classifier');
-        parseMyoGesture(await gestureCharacteristic.readValue());
-        console.info('try to listen gestures !');
         document.querySelector('.console').textContent += '\n characteristic retrieve';
+        console.info('Get gesture caracteristic');
+        //console.info('try to read value classifier');
+        //parseMyoGesture(await gestureCharacteristic.readValue());
+        console.info('try to listen gestures !');
         await gestureCharacteristic.startNotifications();
         console.info('Notifications starts !');
         document.querySelector('.console').textContent += '\n Notifications starts ! ';
@@ -220,11 +336,7 @@ const shape = {
     }
 
     async function readMyoInfos(){
-        if (!controlService){
-            controlService =  await gattServer.getPrimaryService(controlServiceUID)
-        }
-        console.info('Get Control Service');
-        document.querySelector('.console').textContent = 'control service retrieve';
+
 
         // General informations about Myo
         console.info('try to get myo Info characteristic');
@@ -242,11 +354,6 @@ const shape = {
         console.info('Get firmware characteristic values !');
         showFirmwareVersion(valueMyoFirmWare);
 
-        // Instructions to set commands
-        console.info('try to get command characteristic');
-        commandCharacteristic = await controlService.getCharacteristic(commandCharacteristicUID)
-        console.info('Get command characteristic');
-        document.querySelector('.console').textContent += '\n command characteristic retrieve';
     }
 
     function showFirmwareVersion(value){
@@ -259,6 +366,10 @@ const shape = {
             const hardwareRevisionStr = hardwareRev === 0 ? 'Unkown' : hardwareRev === 1 ? 'alpha(rev-c)' : hardwareRev === 2 ? 'rev-d' : hardwareRev;
 
             console.info(`Myo firmware version : ${major}.${minor}.${patch} / ${hardwareRevisionStr}`);
+            document.querySelector('.console').textContent += `\n
+            Myo Firmware version : ${major}.${minor}.${patch} / ${hardwareRevisionStr}`;
+            document.querySelector('.console').textContent += `\n
+            Myo Firmware version : ${+major.toString(16) / 100}.${+minor.toString(16) / 100}.${patch.toString(16)} / ${hardwareRevisionStr.toString(16)}`;
         }catch(e){
             console.error(e);
         }
@@ -279,17 +390,116 @@ const shape = {
             let streamIndicating = value.getUint8(11);
             let sku = value.getUint8(12);
 
+            document.querySelector('.console').textContent += `
+             Myo Informations :`;
             console.log('serialNumber', serialNumber0.toString(16), serialNumber1.toString(16), serialNumber2.toString(16), serialNumber3.toString(16), serialNumber4.toString(16), serialNumber5.toString(8));
+            document.querySelector('.console').textContent += `
+             -> Serial Number : ${serialNumber5.toString(16)}:${serialNumber4.toString(16)}:${serialNumber3.toString(16)}:${serialNumber2.toString(16)}:${serialNumber1.toString(16)}:${serialNumber0.toString(16)}`;
             console.log('unlockPose', unlockPose);
-            console.log('activeClassifierType', activeClassifierType, activeClassifierType === 0 ? 'classifier Package' : 'user data');
+            document.querySelector('.console').textContent += `
+             -> unlockPose : ${unlockPose}`;
+            const activeClassifierTypeStr = `${activeClassifierType}, ${activeClassifierType === 0 ? 'classifier Package' : 'user data'}`;
+            console.log('activeClassifierType', activeClassifierTypeStr);
+            document.querySelector('.console').textContent += `
+             -> activClassifierType : ${activeClassifierTypeStr}`;
             console.log('activeClassifierIndex', activeClassifierIndex);
-            console.log('hasCustomClassifier', hasCustomClassifier, hasCustomClassifier === 1 ? 'Valid custom classifier' : 'no valid custom classifier');
+            document.querySelector('.console').textContent += `
+             -> activClassifierIndex : ${activeClassifierIndex}`;
+            const hasCustomClassifierStr = `${hasCustomClassifier}, ${hasCustomClassifier === 1 ? 'Valid custom classifier' : 'no valid custom classifier'}`;
+            console.log('hasCustomClassifier', hasCustomClassifierStr);
+            document.querySelector('.console').textContent += `
+             -> hasCustomClassifier : ${hasCustomClassifierStr}`;
             console.log('streamIndicating', streamIndicating);
-            console.log('sku', sku, sku === 0 ? 'Unkown Myo' : sku === 1 ? 'Black Myo' : 'White Myo');
+            document.querySelector('.console').textContent += `
+             -> streamIndicating : ${streamIndicating}`;
+            const skuStr = `${sku}, ${sku === 0 ? 'Unkown Myo' : sku === 1 ? 'Black Myo' : 'White Myo'}`
+            console.log('sku', skuStr);
+            document.querySelector('.console').textContent += `
+             -> sku : ${skuStr}`;
 
         }catch(e){
             console.error(e);
         }
+    }
+
+    function handleIMUDataChanged(event) {
+        //byteLength of ImuData DataView object is 20.
+        // imuData return {{orientation: {w: *, x: *, y: *, z: *}, accelerometer: Array, gyroscope: Array}}
+        let imuData = event.target.value;
+
+        let orientationW = event.target.value.getInt16(0) / 16384;
+        let orientationX = event.target.value.getInt16(2) / 16384;
+        let orientationY = event.target.value.getInt16(4) / 16384;
+        let orientationZ = event.target.value.getInt16(6) / 16384;
+
+        let accelerometerX = event.target.value.getInt16(8) / 2048;
+        let accelerometerY = event.target.value.getInt16(10) / 2048;
+        let accelerometerZ = event.target.value.getInt16(12) / 2048;
+
+        let gyroscopeX = event.target.value.getInt16(14) / 16;
+        let gyroscopeY = event.target.value.getInt16(16) / 16;
+        let gyroscopeZ = event.target.value.getInt16(18) / 16;
+
+        const data = {
+          orientation: {
+            x: orientationX,
+            y: orientationY,
+            z: orientationZ,
+            w: orientationW
+          },
+          accelerometer: {
+            x: accelerometerX,
+            y: accelerometerY,
+            z: accelerometerZ
+          },
+          gyroscope: {
+            x: gyroscopeX,
+            y: gyroscopeY,
+            z: gyroscopeZ
+          }
+        }
+
+        const state = {
+          orientation: data.orientation,
+          accelerometer: data.accelerometer,
+          gyroscope: data.gyroscope
+        }
+
+        console.log(state);
+      }
+
+    function handleEMGDataChanged(event){
+        //byteLength of ImuData DataView object is 20.
+        // imuData return {{orientation: {w: *, x: *, y: *, z: *}, accelerometer: Array, gyroscope: Array}}
+        let emgData = event.target.value;
+
+        let sample1 = [
+          emgData.getInt8(0),
+          emgData.getInt8(1),
+          emgData.getInt8(2),
+          emgData.getInt8(3),
+          emgData.getInt8(4),
+          emgData.getInt8(5),
+          emgData.getInt8(6),
+          emgData.getInt8(7)
+        ]
+
+        let sample2 = [
+          emgData.getInt8(8),
+          emgData.getInt8(9),
+          emgData.getInt8(10),
+          emgData.getInt8(11),
+          emgData.getInt8(12),
+          emgData.getInt8(13),
+          emgData.getInt8(14),
+          emgData.getInt8(15)
+        ]
+
+        const state = {
+            emgData : sample1
+        };
+
+        console.log(state);
     }
 
     window.addEventListener('load', pageLoad);
