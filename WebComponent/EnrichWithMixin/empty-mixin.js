@@ -10,7 +10,7 @@ const EmptyMixin = (subclass) => class extends subclass {
 	}
 
 	connectedCallback(){
-		super.connectedCallback();
+		//super.connectedCallback();
 		if (this._isEmpty()) {
 			this.classList.remove('ng-not-empty');
 			this.classList.remove('is-filled');
