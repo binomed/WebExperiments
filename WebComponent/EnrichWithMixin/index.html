@@ -27,14 +27,21 @@
 			width: 50%;
 			margin: auto;
 		}
+
+		section built-in-input{
+			--built-in-input:{
+				background: grey;
+				width:200px;
+			}
+		}
 	</style>
-	<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.0.20/webcomponents-lite.js"></script>-->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.0.20/webcomponents-lite.js"></script>
 	<!--<script type="text/javascript" src="https://rawgit.com/webcomponents/custom-elements/master/custom-elements.min.js"></script>-->
 	<script
 	src="//cdnjs.cloudflare.com/ajax/libs/document-register-element/1.5.0/document-register-element.js"></script>
 	<script type="module" src="my-input.js"></script>
 	<script type="module" src="my-button.js"></script>
-	<script type="module" src="auto-detect.js"></script>
+	<script type="module" src="built-in-input.js"></script>
 </head>
 <body>
 
@@ -45,6 +52,7 @@
 			<input is="my-input"></input>
 			<button is="my-button">My button</button>
 			<button is="fancy-button">Fancy button</button>
+			<built-in-input type="number"></built-in-input>
 		</div>
 		<div>
 			<h1>From auto detect</h1>
