@@ -80,9 +80,9 @@ userActionCommand[2] = 0x00; // User did a single, discrete action, such as paus
 const shape = {
     filters: [
         {name: 'JefMyo'},{
-        services: [controlServiceUID],
+        services: [controlServiceUID,gestureServiceUID,ImuDataServiceUID,EmgDataServiceUID],
     }],
-    optionalServices: [gestureServiceUID]
+    optionalServices: [controlServiceUID,gestureServiceUID,ImuDataServiceUID,EmgDataServiceUID]
 };
 
 const emgModes = {

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            --color: red;
+            --scheme: 'http';
+            --hostname: 'sfeir.com';
+            --test: () =>{
+                return `var(--scheme)`;
+            }
+            --computeUrl:initial;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello World</h1>
+
+    <script>
+
+        let propertieValue = '';
+
+        document.addEventListener('DOMContentLoaded', _=>{
+            
+            propertieValue = eval(document.body.style.getPropertyValue('--test').toString())();
+
+            document.body.style.setPropertyValue('--computeUrl', propertieValue);
+        })
+
+        function checkProperties(){
+            let temp = eval(document.body.style.getPropertyValue('--test'))();
+            if (temp !== propertieValue){
+                propertieValue = temp;
+                document.body.style.setPropertyValue('--computeUrl', propertieValue);
+            }
+
+            window.requestAnimationFrame(checkProperties);
+        }
+    </script>
+</body>
+</html>
