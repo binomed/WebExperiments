@@ -5,41 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <style>
-        body{
-            --color: red;
-            --scheme: 'http';
-            --hostname: 'sfeir.com';
-            --test: () =>{
-                return `var(--scheme)`;
-            }
-            --computeUrl:initial;
-        }
-    </style>
+    <link href="./style.css" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h1>Hello World</h1>
-
-    <script>
-
-        let propertieValue = '';
-
-        document.addEventListener('DOMContentLoaded', _=>{
+    <div id="pure-css">
+        <h1>JS in CSS with Pure CSS</h1>
+        <div id="bg1" class="bg"></div>
+        <div id="bg2" class="bg"></div>
+        
+    </div>
+    <div id="houdini" style="display: none;">
+            <h1>JS in CSS with Houdini</h1>
             
-            propertieValue = eval(document.body.style.getPropertyValue('--test').toString())();
-
-            document.body.style.setPropertyValue('--computeUrl', propertieValue);
-        })
-
-        function checkProperties(){
-            let temp = eval(document.body.style.getPropertyValue('--test'))();
-            if (temp !== propertieValue){
-                propertieValue = temp;
-                document.body.style.setPropertyValue('--computeUrl', propertieValue);
-            }
-
-            window.requestAnimationFrame(checkProperties);
-        }
-    </script>
+        </div>
+        
+    <script type="module" src="./main.js"></script>
 </body>
 </html>
