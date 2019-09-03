@@ -2,10 +2,10 @@
     --color: red;
     --scheme: http;
     --hostname: localhost;
-    --port: 8080;
+    --port: 5000;
     --img1: hack1.jpg;
     --img2: hack2.jpg;
-    
+
     --computeUrl:initial;
 }
 
@@ -24,18 +24,19 @@ body>div{
         let scheme = `var(--scheme)`;
         let host = `var(--hostname)`;
         let port = var(--port);
-        let url = scheme+'://'+host+':'+port+'/'+img;
-        return url.split(' ').join('');
+        let urlConcat = scheme+'://'+host+':'+port+'/'+img;
+        return "url("+urlConcat.split(' ').join('')+")";
     };
 }
 #pure-css{
-    background: var(--computeUrl);
+    background: var(--computeRandomColor);
     --randomColor: () => {
         let red = Math.random()*255;
         let green = Math.random()*255;
         let blue = Math.random()*255;
         return "rgb("+red+","+green+","+blue+")";
     };
+
     --testDependancy: () => {
         let color = `var(--color)`;
         return color;
@@ -44,6 +45,7 @@ body>div{
 
 #pure-css h1 {
     --color: blue;
+    color: var(--computeTestDependancy);
 }
 
 #pure-css #bg1 {
