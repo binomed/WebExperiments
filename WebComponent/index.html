@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        :root {
+  --x: 10deg;
+  --y: 10deg;
+  --z: 10deg;
+  --base: #1497AD;
+}
+
+web-2-day{
+  width: 500px;
+  transform: rotateZ(90deg);
+}
+
+.photo, web-2-day {
+  // transform: rotateX(var(--x)) rotateY(var(--y)) rotateZ(var(--z));
+  transition: all 0.5s;
+  border: 20px solid white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+/*
+misc styles, nothing to do with CSS variables
+*/
+
+body {
+  text-align: center;
+  background: #ffc600;
+  color: white;
+  font-family: 'helvetica neue', sans-serif;
+  font-weight: 100;
+  font-size: 50px;
+}
+
+.display {
+  // perspective: 800px;
+}
+
+test-component, floorlamp-icon{
+    border: 10px solid black;
+    transform: rotateZ(90deg);
+    width: 200px;
+}
+
+.controls {
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 2;
+}
+
+    </style>
+</head>
+<body>
+
+    <floorlamp-icon></floorlamp-icon>
+<test-component></test-component>
+<!--<h2>Animation with CSS Variables</h2>
+<div class="controls">
+  <label>X</label>
+  <input type="range" id="x" min="0" max="360" value="10">
+  <label>Y</label>
+  <input type="range" id="y" min="0" max="360" value="10">
+  <label>Z</label>
+  <input type="range" id="z" min="0" max="360" value="10">
+
+</div>
+
+<div class="display">
+  <web-2-day></web-2-day>
+</div>-->
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Define The WebComponent Web2Day -->
+
+
+
+
+<script type=module>
+import {html, render} from 'https://unpkg.com/lit-html@0.10.0/lib/lit-extended.js';
+
+class Web2DayComponent extends HTMLElement {
+
+    static get is() {
+        return 'web-2-day'
+    }
+
+    constructor(){
+        super();
+        this.attachShadow({ mode: "open" });
+    }
+
+    render(){
+        return html`
+        <style>
+        :host {
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        svg{
+            height: inherit;
+            width: inherit;
+        }
+        </style>
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="-175 346.2 260.8 101.8" style="enable-background:new -175 346.2 260.8 101.8;" xml:space="preserve">
+    <style type="text/css">
+    .st0{fill:#000000;}
+    .st1{fill:#000000;}
+    .st2{fill:#000000;}
+    </style>
+    <g id="Calque_1">
+    <g>
+        <g>
+            <path class="st0" d="M37.7,412.3c0,1-0.2,2-0.5,3.1c-0.3,1-0.7,1.8-1.1,2.4c-2.3,2.8-5.4,4.1-9.2,4.1c-1.8,0-3.1-0.5-4.1-1.6     c-1-1-1.5-2.5-1.5-4.3c0-1.6,0.5-3,1.6-4c1.1-1.1,2.7-1.8,4.8-2.2l4.4-0.8c2.3-0.5,4.1-1.1,5.5-1.9L37.7,412.3L37.7,412.3z      M14.7,398.1h7.7c0.1-2.1,0.8-3.7,2-4.8c1.3-1.1,3.1-1.7,5.4-1.7c2.6,0,4.5,0.4,5.9,1.3c1.1,0.7,1.8,1.8,2,3.1     c0.1,0.8,0,1.5-0.4,2.3c-0.3,0.7-0.8,1.2-1.4,1.5c-1.4,0.7-3.1,1.2-5.1,1.4l-7.9,1.1c-3.3,0.5-6.1,1.5-8.2,3.1L14.7,398.1     L14.7,398.1z M73.3,383.2l-9.6,34.3h0l-9.9-34.3H40.5l0.1,0.3c-2.6-1-5.8-1.5-9.4-1.5c-6.5,0-11.5,1.3-14.8,4     c-0.6,0.5-1.1,1-1.6,1.5V367h-12v22.3l-0.5-0.7c-3.2-4.4-7.3-6.6-12.5-6.6c-0.4,0-0.7,0-1,0c-0.7,2.5-1.8,4.7-3.2,6.7     c-2.7,3.9-7.7,8.3-14.9,13.1c-0.1,1.2-0.2,2.5-0.2,3.8c0,3.9,0.5,7.5,1.5,10.6H-15c-1.5-2.4-2.2-5.5-2.2-9.5     c0-4.4,0.9-7.9,2.7-10.4c1.8-2.5,4.3-3.8,7.5-3.8c3.2,0,5.7,1.2,7.5,3.6c1.8,2.4,2.7,5.7,2.7,9.9c0,4.6-0.9,8.2-2.7,10.7     c-1.8,2.6-4.3,3.9-7.6,3.9c-1.1,0-2.1-0.2-3.1-0.4v10.5c5.3,0,9.6-2.3,12.9-6.8l0.2-0.3v5.9h11.6v-1.2c2.3,1.6,5.2,2.4,8.6,2.4     c6,0,10.9-2.3,14.6-6.8l0,0.1c0.2,1.8,0.5,3.6,1,5.5v0h13v-1.7c-1-0.5-1.7-1.1-2-2c-0.3-0.8-0.5-2.3-0.5-4.4v-12.8l8,22.4     c-0.6,2.7-1.2,4.4-1.8,5.3c-1,1.3-3.1,2-6.3,2c-1.3,0-2-0.1-2.3-0.2v9.8l5.7,0.1c4.8,0,8.1-1,10-3c1.9-2,4.1-6.9,6.7-14.7     l16.3-47.2L73.3,383.2L73.3,383.2z"/>
+        </g>
+        <g>
+            <path class="st1" d="M-94,415.7h-1.3c-0.3,1.5-1.2,2.7-2.8,3.8c-1.6,1-3.2,1.6-5,1.6c-3.9,0-6.7-1.1-8.4-3.4     c-1.3-1.8-2.1-4.6-2.4-8.2H-94L-94,415.7L-94,415.7z M-111.6,395.7c1.6-2.4,4-3.6,7.1-3.6c3.2,0,5.6,1,7.2,3.1     c1.2,1.6,1.9,3.7,2.2,6.5h-18.6C-113.3,399.2-112.6,397.2-111.6,395.7z M-87.1,389.9c-0.1-0.2-0.2-0.3-0.4-0.5     C-87.3,389.6-87.2,389.8-87.1,389.9z M-86.5,390.9l-0.2-0.3C-86.6,390.6-86.5,390.8-86.5,390.9z M-86.1,391.5L-86.1,391.5     L-86.1,391.5z M-82.6,404.9l0-0.2L-82.6,404.9z M-82.6,406.7c0-0.4,0-0.8,0-1.2C-82.6,405.9-82.6,406.3-82.6,406.7z M-87.7,389.2     c-0.2-0.2-0.4-0.5-0.6-0.7C-88,388.7-87.8,388.9-87.7,389.2z M-55,388.6c-3.5-4.3-8.2-6.5-14-6.5c-5.3,0-9.6,2.3-12.8,6.9     l-0.3,0.3v-22.3h-12v17.1c-2.9-1.4-6.4-2.1-10.3-2.1c-3,0-5.7,0.4-8.1,1.2h-9.6l-7.4,34.1v0v0l-6.7-34.1h-12l-6.8,34h-0.1     l-7.3-34H-175l13.2,46.3h12.3l7.2-34.4l0-0.1h0l0,0.1l7,34.4h12.3l1.8-6.5c0.3,0.4,0.6,0.8,0.9,1.1c3.8,4.3,9.1,6.5,16,6.5     c3.9,0,7.3-0.6,10.3-1.9v0.7h11.8v-6l0.5,0.7c3.3,4.3,7.5,6.5,12.8,6.5c0.7,0,1.4,0,2.1-0.1c0-0.9,0-1.7,0.1-2.6     c0-0.6,0.1-1.1,0.1-1.6c0-0.3,0-0.5,0.1-0.8c0.1-0.7,0.2-1.4,0.3-2.1l0-0.2c0.1-0.7,0.3-1.5,0.5-2.2v0l0,0     c0.2-0.9,0.5-1.8,0.8-2.6l0-0.1c0.2-0.6,0.4-1.2,0.7-1.8c-0.1,0.2-0.2,0.3-0.3,0.5c-1.8,2.5-4.3,3.7-7.6,3.7     c-2,0-3.8-0.5-5.2-1.4c-0.9-0.6-1.8-1.3-2.5-2.3c-1.8-2.4-2.7-5.7-2.7-9.9c0-4.6,0.9-8.2,2.7-10.8c1.8-2.6,4.3-3.9,7.5-3.9     c1.7,0,3.2,0.4,4.5,1.1c1.3,0.6,2.4,1.6,3.3,2.8c1.8,2.5,2.7,6,2.7,10.4c0,2.6-0.3,4.8-0.9,6.7l0-0.1c0.4-0.8,0.9-1.5,1.4-2.3     c0.1-0.1,0.2-0.3,0.3-0.4c2.3-3.4,6-7.1,10.8-11.3C-50.9,395.3-52.5,391.6-55,388.6z"/>
+        </g>
+        <path class="st2" d="M-24.2,423.7c-1.7-2.2-3-4.7-3.8-7.5h-18.4l0.1-0.1c2.7-3.9,7.9-8.3,15.4-13.1c0.6-0.4,1.2-0.8,1.7-1.1    c0.5-5.4,2.2-9.8,5.1-13.4c3.3-4.1,7.6-6.2,12.9-6.4c0.8-2.8,1.2-5.9,1.2-9.2c0-7.8-2.6-14.2-7.8-19.2c-5.2-5-11.9-7.4-20.1-7.4    c-8.8,0-15.7,2.7-20.7,8.1c-5,5.4-7.4,12.6-7.1,21.8h16c-0.2-4.9,0.8-8.8,2.9-11.6c2.1-2.9,5-4.3,8.8-4.3c3.5,0,6.3,1.1,8.5,3.4    c2.1,2.3,3.2,5.3,3.2,9c0,3.4-1,6.6-2.9,9.4c-1.9,2.8-5.3,5.9-10.1,9.2c-4.1,2.9-7.7,5.7-10.9,8.4c0.3,1.9,0.5,4,0.5,6.2    c0,7.5-1.8,13.6-5.3,18.2c-3.1,4-7,6.3-11.9,6.8l0,0.1v0h56.8v-0.2l-0.1,0C-16,430.6-20.7,428.3-24.2,423.7z"/>
+    </g>
+    </g>
+    <g>
+    <path class="st0" d="M-161.6,439.2c0.7-0.1,1.5-0.2,2.4-0.2c1.6,0,2.8,0.4,3.5,1.1c0.8,0.7,1.2,1.7,1.2,3.1c0,1.4-0.4,2.6-1.3,3.4   c-0.8,0.8-2.2,1.3-3.9,1.3c-0.8,0-1.5,0-2.1-0.1V439.2z M-160.5,447c0.3,0.1,0.7,0.1,1.1,0.1c2.4,0,3.7-1.4,3.7-3.7   c0-2.1-1.2-3.4-3.5-3.4c-0.6,0-1,0.1-1.3,0.1V447z"/>
+    <path class="st0" d="M-147.3,439.1v8.8h-1.1v-8.8H-147.3z"/>
+    <path class="st0" d="M-134.2,447.5c-0.5,0.2-1.5,0.5-2.7,0.5c-1.3,0-2.4-0.3-3.3-1.2c-0.8-0.7-1.2-1.9-1.2-3.3   c0-2.6,1.8-4.5,4.7-4.5c1,0,1.8,0.2,2.2,0.4l-0.3,0.9c-0.5-0.2-1.1-0.4-1.9-0.4c-2.1,0-3.5,1.3-3.5,3.5c0,2.2,1.3,3.5,3.4,3.5   c0.7,0,1.2-0.1,1.5-0.2v-2.6h-1.8v-0.9h2.9V447.5z"/>
+    <path class="st0" d="M-126.8,439.1v8.8h-1.1v-8.8H-126.8z"/>
+    <path class="st0" d="M-118.7,440.1h-2.7v-1h6.5v1h-2.7v7.8h-1.1V440.1z"/>
+    <path class="st0" d="M-108.9,445.1l-0.9,2.8h-1.2l3-8.8h1.4l3,8.8h-1.2l-0.9-2.8H-108.9z M-106.1,444.2l-0.9-2.5   c-0.2-0.6-0.3-1.1-0.5-1.6h0c-0.1,0.5-0.3,1.1-0.4,1.6l-0.9,2.5H-106.1z"/>
+    <path class="st0" d="M-97.9,439.1h1.1v7.8h3.7v0.9h-4.9V439.1z"/>
+    <path class="st0" d="M-80.2,446.5c0.5,0.3,1.2,0.6,2,0.6c1.2,0,1.8-0.6,1.8-1.5c0-0.8-0.5-1.3-1.7-1.7c-1.4-0.5-2.3-1.2-2.3-2.5   c0-1.4,1.1-2.4,2.8-2.4c0.9,0,1.5,0.2,1.9,0.4l-0.3,0.9c-0.3-0.2-0.9-0.4-1.7-0.4c-1.2,0-1.7,0.7-1.7,1.3c0,0.8,0.5,1.2,1.7,1.7   c1.5,0.6,2.2,1.3,2.2,2.6c0,1.4-1,2.5-3.1,2.5c-0.8,0-1.8-0.2-2.2-0.6L-80.2,446.5z"/>
+    <path class="st0" d="M-69.1,439.2c0.5-0.1,1.3-0.2,2.2-0.2c1.1,0,1.9,0.3,2.5,0.7c0.5,0.4,0.8,1.1,0.8,1.8c0,0.8-0.2,1.4-0.7,1.9   c-0.6,0.6-1.6,1-2.7,1c-0.3,0-0.7,0-0.9-0.1v3.5h-1.1V439.2z M-68,443.4c0.2,0.1,0.6,0.1,0.9,0.1c1.4,0,2.2-0.7,2.2-1.9   c0-1.2-0.8-1.7-2.1-1.7c-0.5,0-0.9,0-1.1,0.1V443.4z"/>
+    <path class="st0" d="M-57.7,439.2c0.6-0.1,1.4-0.2,2.2-0.2c1.2,0,2,0.2,2.5,0.7c0.4,0.4,0.7,1,0.7,1.7c0,1.2-0.7,1.9-1.7,2.2v0   c0.7,0.2,1.1,0.9,1.3,1.8c0.3,1.2,0.5,2.1,0.7,2.4h-1.2c-0.1-0.2-0.3-1-0.6-2.1c-0.3-1.2-0.7-1.7-1.8-1.7h-1.1v3.8h-1.1V439.2z    M-56.6,443.2h1.2c1.2,0,2-0.7,2-1.7c0-1.1-0.8-1.6-2-1.6c-0.5,0-0.9,0.1-1.1,0.1V443.2z"/>
+    <path class="st0" d="M-45.1,439.1v8.8h-1.1v-8.8H-45.1z"/>
+    <path class="st0" d="M-38.6,447.9v-8.8h1.2l2.8,4.4c0.7,1,1.2,2,1.6,2.8l0,0c-0.1-1.2-0.1-2.2-0.1-3.6v-3.7h1.1v8.8h-1.1l-2.8-4.4   c-0.6-1-1.2-2-1.6-2.9l0,0c0.1,1.1,0.1,2.2,0.1,3.6v3.7H-38.6z"/>
+    <path class="st0" d="M-18.9,447.5c-0.5,0.2-1.5,0.5-2.7,0.5c-1.3,0-2.4-0.3-3.3-1.2c-0.8-0.7-1.2-1.9-1.2-3.3   c0-2.6,1.8-4.5,4.7-4.5c1,0,1.8,0.2,2.2,0.4l-0.3,0.9c-0.5-0.2-1.1-0.4-1.9-0.4c-2.1,0-3.5,1.3-3.5,3.5c0,2.2,1.3,3.5,3.4,3.5   c0.7,0,1.2-0.1,1.5-0.2v-2.6h-1.8v-0.9h2.9V447.5z"/>
+    <path class="st0" d="M-12.6,439.2c0.5-0.1,1.3-0.2,2.1-0.2c1.1,0,1.9,0.2,2.4,0.6c0.5,0.3,0.7,0.9,0.7,1.5c0,0.8-0.6,1.6-1.5,1.9v0   c0.8,0.2,1.8,0.9,1.8,2.2c0,0.8-0.3,1.3-0.7,1.8c-0.6,0.6-1.6,0.8-3,0.8c-0.8,0-1.4-0.1-1.8-0.1V439.2z M-11.5,442.8h1   c1.2,0,1.9-0.6,1.9-1.5c0-1-0.8-1.4-1.9-1.4c-0.5,0-0.8,0-1,0.1V442.8z M-11.5,447c0.2,0,0.5,0.1,0.9,0.1c1.2,0,2.2-0.4,2.2-1.7   c0-1.2-1-1.7-2.3-1.7h-0.9V447z"/>
+    <path class="st0" d="M-1.1,439.2c0.6-0.1,1.4-0.2,2.2-0.2c1.2,0,2,0.2,2.5,0.7c0.4,0.4,0.7,1,0.7,1.7c0,1.2-0.7,1.9-1.7,2.2v0   c0.7,0.2,1.1,0.9,1.3,1.8c0.3,1.2,0.5,2.1,0.7,2.4H3.4c-0.1-0.2-0.3-1-0.6-2.1c-0.3-1.2-0.7-1.7-1.8-1.7H0v3.8h-1.1V439.2z    M0,443.2h1.2c1.2,0,2-0.7,2-1.7c0-1.1-0.8-1.6-2-1.6c-0.5,0-0.9,0.1-1.1,0.1V443.2z"/>
+    <path class="st0" d="M14.9,443.8h-3.4v3.2h3.8v0.9h-4.9v-8.8h4.7v0.9h-3.6v2.8h3.4V443.8z"/>
+    <path class="st0" d="M22.7,445.1l-0.9,2.8h-1.2l3-8.8H25l3,8.8h-1.2l-0.9-2.8H22.7z M25.6,444.2l-0.9-2.5c-0.2-0.6-0.3-1.1-0.5-1.6   h0c-0.1,0.5-0.3,1.1-0.4,1.6l-0.9,2.5H25.6z"/>
+    <path class="st0" d="M33.7,439.1h1.1v4.2h0c0.2-0.3,0.5-0.7,0.7-0.9l2.7-3.3h1.4l-3.2,3.7l3.4,5h-1.3l-2.9-4.3l-0.8,1v3.3h-1.1   V439.1z"/>
+    </g>
+    </svg>
+        `;
+    }
+
+    connectedCallback() {
+        render(this.render(), this.shadowRoot);
+
+    }
+
+}
+
+customElements.define(Web2DayComponent.is, Web2DayComponent);
+
+class TestComponent extends HTMLElement {
+
+    static get is() {
+        return 'test-component'
+    }
+
+    constructor(){
+        super();
+        this.attachShadow({ mode: "open" });
+    }
+
+    render(){
+        return html`
+        <style>
+        svg{
+            height: inherit;
+            width: inherit;
+        }
+        </style>
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="30" viewBox="0 0 15 30">
+        <g id="Canvas" transform="translate(-127)">
+        <g id="floor-lamp">
+            <use id="shade" fill="#FFCC01" transform="translate(127)" xlink:href="#path0_fill"></use>
+            <use id="stand" fill="#35ABDD" transform="translate(129.812 10.313)" xlink:href="#path1_fill"></use>
+        </g>
+        </g>
+        <defs>
+        <path id="path0_fill" d="M1.875 0h11.25L15 9.375H0L1.875 0z"></path>
+        <path id="path1_fill" d="M5.625 0H3.75v16.875H.625A.625.625 0 0 0 0 17.5v1.563c0 .345.28.625.625.625H8.75c.345 0 .625-.28.625-.625V17.5a.625.625 0 0 0-.625-.625H5.625V0z"></path>
+        </defs>
+    </svg>
+        `;
+    }
+
+    connectedCallback() {
+        render(this.render(), this.shadowRoot);
+
+    }
+
+}
+
+customElements.define(TestComponent.is, TestComponent);
+
+class FloorlampIconComponent extends HTMLElement {
+  constructor () {
+    super()
+    this.shadow = this.attachShadow({ mode: 'open' })
+    this.dark = true
+    this.active = true
+    this.colors = {
+      shade_active: '#FFCC01',
+      shade_inactive: '#C3C4C7',
+      stand_light: '#FFFFFF',
+      stand_dark_active: '#35ABDD',
+      stand_dark_inactive: '#9699A0'
+
+    }
+    this.render()
+  }
+
+  static get observedAttributes() { return ['status', 'type'] }
+
+  attributeChangedCallback (name, oldValue, newValue) {
+    if (newValue) {
+      switch (name) {
+        case 'status': {
+          if (newValue === 'on') this.active = true
+          if (newValue === 'off') this.active = false
+          this.renderColors()
+          break
+        }
+        case 'type' : {
+          if (newValue === 'dark') this.dark = true
+          if (newValue === 'light') this.dark = false
+          this.renderColors()
+          break
+        }
+      }
+    }
+  }
+
+  connectedCallback () {
+    this.renderColors()
+  }
+
+  render () {
+    // console.log('rendering')
+    const template = `
+<style>
+  svg {
+    height: inherit;
+    width: inherit;
+  }
+</style>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="30" viewBox="0 0 15 30">
+  <g id="Canvas" transform="translate(-127)">
+    <g id="floor-lamp">
+      <use id="shade" fill="#FFCC01" transform="translate(127)" xlink:href="#path0_fill"/>
+      <use id="stand" fill="#35ABDD" transform="translate(129.812 10.313)" xlink:href="#path1_fill"/>
+    </g>
+  </g>
+  <defs>
+    <path id="path0_fill" d="M1.875 0h11.25L15 9.375H0L1.875 0z"/>
+    <path id="path1_fill" d="M5.625 0H3.75v16.875H.625A.625.625 0 0 0 0 17.5v1.563c0 .345.28.625.625.625H8.75c.345 0 .625-.28.625-.625V17.5a.625.625 0 0 0-.625-.625H5.625V0z"/>
+  </defs>
+</svg>
+`
+    this.shadow.innerHTML = template
+  }
+
+  renderColors () {
+    let standColor
+    if ( !this.dark ) {
+      standColor = this.colors.stand_light
+    } else {
+      standColor = this.active ? this.colors.stand_dark_active : this.colors.stand_dark_inactive
+    }
+    let shadeColor = this.active ? this.colors.shade_active : this.colors.shade_inactive
+
+    const stand = this.shadow.getElementById('stand')
+    stand.setAttribute('fill', standColor)
+    const shade = this.shadow.getElementById('shade')
+    shade.setAttribute('fill', shadeColor)
+  }
+
+  set status (value) {
+    this.setAttribute('status', value)
+  }
+
+  set type (value) {
+    this.setAttribute('type', value)
+  }
+}
+
+customElements.define('floorlamp-icon', FloorlampIconComponent)
+
+</script>
+
+
+
+<script>
+    // get the inputs
+const inputs = [].slice.call(document.querySelectorAll('.controls input'));
+
+// listen for changes
+inputs.forEach(input => input.addEventListener('change', handleUpdate));
+inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+
+function handleUpdate(e) {
+  // append 'px' to the end of spacing and blur variables
+  const suffix = (this.id === 'base' ? '' : 'px');
+  var property = `--${this.id}`;
+  // remove the last one so we don't pollute the element with inline styles
+  document.documentElement.style.removeProperty(property);
+  // update the element. Note: We are doing this on <html>, but varaibles can be scoped to ANY element
+  document.documentElement.style.setProperty(property, this.value + 'deg');
+}
+</script>
+
+
+</body>
+</html>
