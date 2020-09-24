@@ -1,0 +1,25 @@
+{
+  "name": "iframecommunication",
+  "version": "1.0.0",
+  "description": "test for iframe injection",
+  "main": "index.js",
+  "scripts": {
+    "server": "node index.js",
+    "main": "npx serve",
+    "iframe": "npx serve -l 5001 --cors",
+    "iframe-nocors": "npx serve -l 5002",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "iframe"
+  ],
+  "author": "jefbinomed",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "http-proxy": "^1.18.1",
+    "node-fetch": "^2.6.1",
+    "serve": "^11.3.2"
+  }
+}

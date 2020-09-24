@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+</head>
+<body>
+    Hello from main Page
+    <span>Iframe with forward presentation port</span>
+    <iframe id="myIFrame" width="500" height="500"></iframe>
+
+    <span>Iframe with forward 100% forward</span>
+    <iframe id="myIFrameFullForward" width="500" height="500"></iframe>
+
+    <script>
+        
+        fetch("http://localhost:3000/iframe")
+        .then(res => res.text())
+        .then(iFramehtml => {
+            const doc = document.getElementById('myIFrame').contentWindow.document;
+            doc.open();
+            doc.write(iFramehtml);
+            doc.close();
+        })
+        
+        fetch("http://localhost:3000/iframeFull")
+        .then(res => res.text())
+        .then(iFramehtml => {
+            const doc = document.getElementById('myIFrameFullForward').contentWindow.document;
+            doc.open();
+            doc.write(iFramehtml);
+            doc.close();
+        })
+
+    </script>
+</body>
+</html>
