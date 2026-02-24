@@ -160,7 +160,7 @@ async function onSummarize() {
 
 async function onPrompt() {
     const text = document.getElementById('text-input').value;
-    const file = document.getElementById('image-input');//.files[0];
+    const file = document.getElementById('image-input').files[0];
     if (!text && !file) return log('Entrée manquante', 'error');
 
     log('Appel LanguageModel (Gemini Nano)...');
@@ -169,13 +169,15 @@ async function onPrompt() {
         if (!api) throw new Error('API non trouvée');
 
         const session = await api.create({
-            expectedInputs: [{ type: "text", languages: ['en'] }, { type: "image" },],
-            expectedOutputs: [{ type: "text", languages: ['en'] }],
+            //expectedInputs: [{ type: "text", languages: ['en'] }, { type: "image" },],
+            expectedInputs: [{ type: "text" }, { type: "image" },],
+            //expectedOutputs: [{ type: "text", languages: ['en'] }],
             initialPrompts: [
                 {
                     role: 'system',
                     content:
-                        'Your task is to describe images. Only use plain text. Do not use Markdown. Be short and precise.',
+                        //'Your task is to describe images. Only use plain text. Do not use Markdown. Be short and precise.',
+                        'Réponds en français. Sois concis. pas de markdown'
                 },
             ],
         });
@@ -192,12 +194,7 @@ async function onPrompt() {
                 ]
             }]);
         } else {
-            stream = session.promptStreaming([{
-                role: "user",
-                content: [
-                    { type: 'text', value: text },
-                ]
-            }]);
+            stream = session.promptStreaming(text);
 
         }
 

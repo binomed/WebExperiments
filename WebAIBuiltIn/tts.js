@@ -25,15 +25,29 @@ window.tts = (function () {
         const enVoices = allVoices.filter(v => v.lang.startsWith('en')).sort((a, b) => a.name.localeCompare(b.name));
 
         const updateList = (select, list) => {
-            const selectedIndex = select.selectedIndex < 0 ? 0 : select.selectedIndex;
+            const previousValue = select.value;
             select.innerHTML = '';
-            list.forEach(voice => {
+
+            let googleIndex = -1;
+            list.forEach((voice, index) => {
                 const option = document.createElement('option');
                 option.textContent = `${voice.name} (${voice.lang})`;
                 option.setAttribute('data-name', voice.name);
                 select.appendChild(option);
+
+                if (voice.name.includes('Google')) {
+                    googleIndex = index;
+                }
             });
-            select.selectedIndex = selectedIndex;
+
+            // Si on avait déjà une sélection, on essaie de la garder
+            if (previousValue) {
+                select.value = previousValue;
+            }
+            // Sinon, si on a trouvé une voix Google, on la sélectionne par défaut
+            else if (googleIndex !== -1) {
+                select.selectedIndex = googleIndex;
+            }
         };
 
         updateList(voiceSelectFr, frVoices);
