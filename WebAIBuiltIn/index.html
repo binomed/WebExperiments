@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome Built-in AI Playground</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Chrome Built-in AI Playground</h1>
+
+        <section id="config-guide" class="card">
+            <h2>Configuration du navigateur</h2>
+            <p>Pour tester ces API, assurez-vous d'utiliser <strong>Chrome 138+</strong> et d'activer les flags suivants
+                :</p>
+            <ul>
+                <li><code>chrome://flags/#optimization-guide-on-device-model</code> (Enabled BypassPerfRequirement)</li>
+                <li><code>chrome://flags/#prompt-api-for-gemini-nano</code> (Enabled)</li>
+                <li><code>chrome://flags/#prompt-api-for-gemini-nano-multimodal-input</code> (Enabled)</li>
+            </ul>
+            <p>Vérifiez également dans <code>chrome://components</code> que "Optimization Guide On Device Model" est à
+                jour.</p>
+        </section>
+
+        <section id="status-panel" class="card">
+            <h2>État des API</h2>
+            <div id="api-status-list">
+                <!-- Status will be injected here -->
+            </div>
+            <button id="check-status-btn">Vérifier l'état</button>
+        </section>
+
+        <section id="test-area" class="card">
+            <h2>Zone de test</h2>
+            <div class="input-group">
+                <label for="text-input">Texte à traiter :</label>
+                <div class="textarea-wrapper">
+                    <textarea id="text-input" placeholder="Entrez votre texte ici..."></textarea>
+                    <button id="btn-voice" class="voice-btn" title="Saisie vocale">🎙️</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="image-input">Image pour multimodal (Prompt API) :</label>
+                <input type="file" id="image-input" accept="image/*">
+                <div id="image-preview" class="preview"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="translation-direction">Direction de traduction (Translator) :</label>
+                <select id="translation-direction">
+                    <option value="fr-en">Français -> Anglais</option>
+                    <option value="en-fr">Anglais -> Français</option>
+                </select>
+            </div>
+
+            <div class="button-grid">
+                <button id="btn-detect-lang" class="api-btn">Détecter la langue</button>
+                <button id="btn-translate" class="api-btn">Traduire</button>
+                <button id="btn-summarize" class="api-btn">Résumer</button>
+                <button id="btn-prompt" class="api-btn">Prompt API (Gemini Nano)</button>
+                <button id="btn-write" class="api-btn">Writer API</button>
+                <button id="btn-rewrite" class="api-btn">Rewriter API</button>
+                <button id="btn-proofread" class="api-btn">Proofreader API</button>
+            </div>
+        </section>
+
+        <section id="tts-panel" class="card">
+            <h2>Synthèse Vocale (TTS)</h2>
+            <div class="control-grid">
+                <div class="input-group">
+                    <label for="voice-select-fr">Voix Française :</label>
+                    <select id="voice-select-fr"></select>
+                </div>
+                <div class="input-group">
+                    <label for="voice-select-en">Voix Anglaise :</label>
+                    <select id="voice-select-en"></select>
+                </div>
+            </div>
+            <div class="control-grid">
+                <div class="input-group">
+                    <label for="pitch">Tonalité (Pitch) : <span id="pitch-val">1</span></label>
+                    <input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1">
+                </div>
+                <div class="input-group">
+                    <label for="rate">Vitesse (Rate) : <span id="rate-val">1</span></label>
+                    <input type="range" id="rate" min="0.5" max="2" step="0.1" value="1">
+                </div>
+            </div>
+            <div class="input-group checkbox-group">
+                <input type="checkbox" id="auto-read" checked>
+                <label for="auto-read">Lecture automatique du résultat</label>
+            </div>
+            <button id="btn-speak" class="api-btn">Lire le résultat manuel</button>
+        </section>
+
+        <section id="output-panel" class="card">
+            <h2>Résultat</h2>
+            <div id="output-display" class="output">
+                Attente d'une action...
+            </div>
+            <div id="log-display" class="logs">
+                <!-- Logs will be injected here -->
+            </div>
+        </section>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="speech.js"></script>
+    <script src="tts.js"></script>
+</body>
+
+</html>
