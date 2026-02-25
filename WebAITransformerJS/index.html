@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="WebAI Transformer.js - Test des capacités IA dans le navigateur avec Transformers.js">
+    <title>WebAI Transformer.js</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <h1>🤖 WebAI Transformer.js</h1>
+        <p class="subtitle">Machine Learning dans le navigateur — aucun serveur requis</p>
+    </header>
+
+    <nav id="tabs" role="tablist">
+        <button class="tab active" data-tab="chat" role="tab" aria-selected="true">💬 Chat</button>
+        <button class="tab" data-tab="stt" role="tab">🎙️ Speech-to-Text</button>
+        <button class="tab" data-tab="tts" role="tab">🔊 Text-to-Speech</button>
+        <button class="tab" data-tab="translation" role="tab">🌍 Traduction</button>
+        <button class="tab" data-tab="vision" role="tab">👁️ Vision Live</button>
+        <button class="tab" data-tab="multimodal" role="tab">🖼️ Multimodal</button>
+    </nav>
+
+    <!-- ═══════════════ CHAT ═══════════════ -->
+    <section id="panel-chat" class="panel active" role="tabpanel">
+        <h2>Chat avec Ministral-3B</h2>
+        <p class="hint">Text generation avec streaming — nécessite WebGPU</p>
+
+        <div id="chat-status" class="status-bar"></div>
+        <div id="chat-progress-container" class="progress-container hidden">
+            <div id="chat-progress" class="progress-bar"></div>
+        </div>
+
+        <div id="chat-messages" class="messages-area">
+            <div class="message assistant">Bonjour ! Chargez le modèle puis posez-moi une question.</div>
+        </div>
+
+        <div class="input-row">
+            <button id="chat-load-btn" class="btn btn-secondary">Charger le modèle</button>
+            <textarea id="chat-input" placeholder="Écrivez votre message..." rows="2" disabled></textarea>
+            <button id="chat-send-btn" class="btn btn-primary" disabled>Envoyer</button>
+        </div>
+    </section>
+
+    <!-- ═══════════════ STT ═══════════════ -->
+    <section id="panel-stt" class="panel" role="tabpanel">
+        <h2>Speech-to-Text (Whisper)</h2>
+        <p class="hint">Enregistrez votre voix et obtenez la transcription</p>
+
+        <div id="stt-status" class="status-bar"></div>
+        <div id="stt-progress-container" class="progress-container hidden">
+            <div id="stt-progress" class="progress-bar"></div>
+        </div>
+
+        <div class="controls-row">
+            <button id="stt-load-btn" class="btn btn-secondary">Charger Whisper</button>
+            <button id="stt-record-btn" class="btn btn-primary" disabled>🎙️ Enregistrer</button>
+        </div>
+
+        <div id="stt-output" class="output-area">
+            <p class="placeholder">La transcription apparaîtra ici...</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════ TTS ═══════════════ -->
+    <section id="panel-tts" class="panel" role="tabpanel">
+        <h2>Text-to-Speech (Kokoro)</h2>
+        <p class="hint">Synthèse vocale via modèle Kokoro-82M</p>
+
+        <div id="tts-status" class="status-bar"></div>
+        <div id="tts-progress-container" class="progress-container hidden">
+            <div id="tts-progress" class="progress-bar"></div>
+        </div>
+
+        <textarea id="tts-input" placeholder="Entrez le texte à lire..."
+            rows="4">Life is like a box of chocolates. You never know what you're gonna get.</textarea>
+
+        <div class="controls-row">
+            <button id="tts-load-btn" class="btn btn-secondary">Charger Kokoro</button>
+            <select id="tts-voice" disabled>
+                <option value="af_bella">af_bella (femme)</option>
+                <option value="am_adam">am_adam (homme)</option>
+            </select>
+            <button id="tts-speak-btn" class="btn btn-primary" disabled>🔊 Lire</button>
+        </div>
+
+        <audio id="tts-audio" controls class="hidden"></audio>
+    </section>
+
+    <!-- ═══════════════ TRANSLATION ═══════════════ -->
+    <section id="panel-translation" class="panel" role="tabpanel">
+        <h2>Traduction (NLLB)</h2>
+        <p class="hint">Traduction multilingue avec NLLB-200</p>
+
+        <div id="translation-status" class="status-bar"></div>
+        <div id="translation-progress-container" class="progress-container hidden">
+            <div id="translation-progress" class="progress-bar"></div>
+        </div>
+
+        <div class="translation-grid">
+            <div class="translation-col">
+                <label for="translation-src-lang">Source</label>
+                <select id="translation-src-lang">
+                    <option value="fra_Latn" selected>🇫🇷 Français</option>
+                    <option value="eng_Latn">🇬🇧 English</option>
+                    <option value="spa_Latn">🇪🇸 Español</option>
+                    <option value="deu_Latn">🇩🇪 Deutsch</option>
+                    <option value="ita_Latn">🇮🇹 Italiano</option>
+                    <option value="por_Latn">🇵🇹 Português</option>
+                    <option value="nld_Latn">🇳🇱 Nederlands</option>
+                    <option value="jpn_Jpan">🇯🇵 日本語</option>
+                    <option value="zho_Hans">🇨🇳 中文</option>
+                    <option value="arb_Arab">🇸🇦 العربية</option>
+                </select>
+                <textarea id="translation-input" placeholder="Texte à traduire..."
+                    rows="5">Bonjour, comment allez-vous aujourd'hui ?</textarea>
+            </div>
+
+            <div class="translation-col">
+                <label for="translation-tgt-lang">Cible</label>
+                <select id="translation-tgt-lang">
+                    <option value="fra_Latn">🇫🇷 Français</option>
+                    <option value="eng_Latn" selected>🇬🇧 English</option>
+                    <option value="spa_Latn">🇪🇸 Español</option>
+                    <option value="deu_Latn">🇩🇪 Deutsch</option>
+                    <option value="ita_Latn">🇮🇹 Italiano</option>
+                    <option value="por_Latn">🇵🇹 Português</option>
+                    <option value="nld_Latn">🇳🇱 Nederlands</option>
+                    <option value="jpn_Jpan">🇯🇵 日本語</option>
+                    <option value="zho_Hans">🇨🇳 中文</option>
+                    <option value="arb_Arab">🇸🇦 العربية</option>
+                </select>
+                <div id="translation-output" class="output-area">
+                    <p class="placeholder">La traduction apparaîtra ici...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-row">
+            <button id="translation-load-btn" class="btn btn-secondary">Charger NLLB</button>
+            <button id="translation-translate-btn" class="btn btn-primary" disabled>🌍 Traduire</button>
+        </div>
+    </section>
+
+    <!-- ═══════════════ VISION ═══════════════ -->
+    <section id="panel-vision" class="panel" role="tabpanel">
+        <h2>Vision Live (DETR)</h2>
+        <p class="hint">Détection d'objets en temps réel via webcam</p>
+
+        <div id="vision-status" class="status-bar"></div>
+        <div id="vision-progress-container" class="progress-container hidden">
+            <div id="vision-progress" class="progress-bar"></div>
+        </div>
+
+        <div class="controls-row">
+            <button id="vision-load-btn" class="btn btn-secondary">Charger DETR</button>
+            <button id="vision-start-btn" class="btn btn-primary" disabled>📷 Démarrer Webcam</button>
+            <button id="vision-detect-btn" class="btn btn-accent" disabled>🔍 Détecter</button>
+            <label class="checkbox-label">
+                <input type="checkbox" id="vision-auto-detect"> Auto (3s)
+            </label>
+        </div>
+
+        <div id="vision-container" class="vision-container hidden">
+            <video id="vision-video" autoplay playsinline></video>
+            <canvas id="vision-canvas"></canvas>
+        </div>
+
+        <div id="vision-detections" class="output-area">
+            <p class="placeholder">Les détections apparaîtront ici...</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════ MULTIMODAL ═══════════════ -->
+    <section id="panel-multimodal" class="panel" role="tabpanel">
+        <h2>Multimodal (Ministral-3B Vision)</h2>
+        <p class="hint">Posez des questions sur une image — nécessite WebGPU</p>
+
+        <div id="multimodal-status" class="status-bar"></div>
+        <div id="multimodal-progress-container" class="progress-container hidden">
+            <div id="multimodal-progress" class="progress-bar"></div>
+        </div>
+
+        <div class="multimodal-layout">
+            <div class="multimodal-image-col">
+                <label class="custom-file-upload">
+                    <input id="multimodal-file" type="file" accept="image/*">
+                    📁 Choisir une image
+                </label>
+                <div id="multimodal-preview"></div>
+            </div>
+
+            <div class="multimodal-text-col">
+                <textarea id="multimodal-question" placeholder="Posez une question sur l'image..."
+                    rows="3">Décris cette image en détail.</textarea>
+                <div class="controls-row">
+                    <button id="multimodal-load-btn" class="btn btn-secondary">Charger le modèle</button>
+                    <button id="multimodal-ask-btn" class="btn btn-primary" disabled>🤔 Analyser</button>
+                </div>
+                <div id="multimodal-output" class="output-area">
+                    <p class="placeholder">La réponse apparaîtra ici...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Propulsé par <a href="https://huggingface.co/docs/transformers.js" target="_blank">🤗 Transformers.js</a> —
+            Tout tourne dans votre navigateur</p>
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+</body>
+
+</html>
