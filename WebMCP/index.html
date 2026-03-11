@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebMCP Example</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --surface-color: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --primary-accent: #3b82f6;
+            --primary-hover: #2563eb;
+            --success: #10b981;
+            --font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.5s ease;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--surface-color);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-family: var(--font-family);
+            box-sizing: border-box;
+            transition: border-color 0.2s, outline 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-accent);
+        }
+
+        button {
+            background: var(--primary-accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            width: 100%;
+            font-family: var(--font-family);
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* WebMCP specific styles */
+        form:tool-form-active {
+            outline: var(--primary-accent) dashed 2px;
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        input:tool-submit-active, button:tool-submit-active {
+            outline: #f43f5e dashed 2px;
+            outline-offset: 2px;
+        }
+
+        .feed-container {
+            margin-top: 1.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .message {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .message:last-child {
+            margin-bottom: 0;
+        }
+
+        .message strong {
+            color: var(--primary-accent);
+        }
+
+        .logs {
+            grid-column: 1 / -1;
+            background: rgba(0, 0, 0, 0.4);
+            font-family: monospace;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+        
+        .log-time {
+            color: #94a3b8;
+            margin-right: 0.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+        
+        .status-inactive {
+            background: rgba(244, 63, 94, 0.2);
+            color: #fb7185;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>WebMCP Toolkit</h1>
+        <p class="subtitle">Interact with this page using AI Agents! This page exposes tools both declaratively (HTML) and imperatively (JS).</p>
+        <div id="mcp-status" class="status-badge status-inactive">Checking WebMCP Support...</div>
+
+        <!-- Extensions Requirement Banner -->
+        <div style="margin-top: 2rem; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--primary-accent); border-radius: 12px; padding: 1.5rem; max-width: 800px; margin-left: auto; margin-right: auto; text-align: left;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                <strong style="color: var(--primary-accent); font-size: 1.1rem;">Required Extensions</strong>
+            </div>
+            <p style="font-size: 0.95rem; margin: 0 0 1rem 0; color: var(--text-secondary);">Pour faire fonctionner cette page avec un agent IA, vous devez installer l'une des extensions suivantes dans Chrome (version 146+) :</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                <a href="https://chromewebstore.google.com/detail/webmcp-inspector/edfjnadfiapmddgplgnphlflgafmcino?utm_source=item-share-cb" target="_blank" style="background: var(--primary-accent); color: white; text-decoration: none; padding: 0.6rem 1rem; border-radius: 8px; font-weight: 500; font-size: 0.9rem; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">WebMCP Inspector</a>
+                <a href="https://chromewebstore.google.com/detail/webmcp-model-context-tool/gbpdfapgefenggkahomfgkhfehlcenpd" target="_blank" style="background: rgba(255,255,255,0.1); color: white; text-decoration: none; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-weight: 500; font-size: 0.9rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">Model Context Tool</a>
+            </div>
+            <p style="font-size: 0.8rem; margin: 1rem 0 0 0; color: #64748b; font-style: italic;">Note: Assurez-vous d'avoir activé le flag <code>chrome://flags/#enable-webmcp-testing</code>.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Declarative Tools Side -->
+        <div class="card">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                HTML Tools (Declarative)
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">
+                This form is annotated with WebMCP attributes. Agents can discover it and submit it automatically.
+            </p>
+
+            <form toolautosubmit toolname="change_background" tooldescription="Change the background color of the web page. Use this to set the background to a specific color hex or name." id="bg-form">
+                <div class="form-group">
+                    <label for="color">Body Background Color</label>
+                    <input type="text" name="color" id="color" placeholder="e.g. #0f172a or midnightblue" required 
+                           toolparamtitle="Background Color" 
+                           toolparamdescription="The color to set the background to. Can be a hex code or a color name.">
+                </div>
+                <button type="submit">Change Color</button>
+            </form>
+        </div>
+
+        <!-- Imperative Tools Side -->
+        <div class="card">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                JS Tools (Imperative)
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">
+                These tools are registered in JavaScript using <code>window.navigator.modelContext.registerTool</code>.
+            </p>
+            
+            <div style="margin-bottom: 1rem;">
+                <label>Message Feed</label>
+                <div class="feed-container" id="message-feed">
+                    <div class="message" style="opacity: 0.6; text-align: center; font-style: italic;" id="empty-feed-msg">
+                        No messages yet. Ask the agent to add one!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs -->
+        <div class="logs" id="activity-logs">
+            <div style="color: var(--primary-accent); margin-bottom: 0.5rem; font-weight: bold; font-family: sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Activity Log</div>
+        </div>
+    </div>
+
+    <script>
+        // --- Utilities ---
+        function addLog(message) {
+            const logsContainer = document.getElementById('activity-logs');
+            const logEl = document.createElement('div');
+            logEl.className = 'log-entry';
+            const time = new Date().toLocaleTimeString();
+            logEl.innerHTML = `<span class="log-time">[${time}]</span> ${message}`;
+            logsContainer.appendChild(logEl);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        // --- Check WebMCP Support ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const statusBadge = document.getElementById('mcp-status');
+            if (window.navigator.modelContext) {
+                statusBadge.textContent = "WebMCP Supported & Active";
+                statusBadge.className = "status-badge status-active";
+                addLog("WebMCP API detected globally. Initializing tools...");
+                initImperativeTools();
+            } else {
+                statusBadge.textContent = "WebMCP Not Detected";
+                statusBadge.className = "status-badge status-inactive";
+                addLog("Warning: navigator.modelContext is undefined. Are you using Chrome 146+ with WebMCP enabled?");
+            }
+        });
+
+        // --- Declarative Form Handler ---
+        const bgForm = document.getElementById('bg-form');
+        const colorInput = document.getElementById('color');
+
+        function applyBackgroundColor(color) {
+            if (!color) return;
+            document.body.style.backgroundColor = color;
+            addLog(`[UI Update] Applying background color: <span style="font-family: monospace; color: ${color}; font-weight: bold;">${color}</span>`);
+        }
+
+        bgForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const color = formData.get('color');
+            
+            applyBackgroundColor(color);
+            addLog(`[Declarative Tool] "submit" event received (Agent invoked: ${!!e.agentInvoked})`);
+            
+            // Check if triggered by an agent (WebMCP feature)
+            if (e.agentInvoked && typeof e.respondWith === 'function') {
+                e.respondWith(Promise.resolve(`Successfully changed background color to ${color}`));
+            }
+        });
+
+        // Fallback: Apply on direct change
+        colorInput.addEventListener('change', (e) => {
+            applyBackgroundColor(e.target.value);
+        });
+
+        // --- Imperative Tools Registration ---
+        function initImperativeTools() {
+            if (!window.navigator.modelContext) return;
+            
+            try {
+                window.navigator.modelContext.registerTool({
+                    name: "add_message",
+                    description: "Add a new message to the page's public message feed.",
+                    inputSchema: {
+                        type: "object",
+                        properties: {
+                            message: { 
+                                type: "string", 
+                                description: "The content of the message to add to the feed." 
+                            },
+                            author: { 
+                                type: "string", 
+                                description: "The name of the author writing the message." 
+                            }
+                        },
+                        required: ["message", "author"]
+                    },
+                    execute: ({ message, author }) => {
+                        const container = document.getElementById('message-feed');
+                        const emptyMsg = document.getElementById('empty-feed-msg');
+                        
+                        if (emptyMsg) {
+                            emptyMsg.remove();
+                        }
+
+                        const msgEl = document.createElement('div');
+                        msgEl.className = 'message';
+                        msgEl.innerHTML = `<strong>${author}:</strong> ${message}`;
+                        container.appendChild(msgEl);
+                        
+                        // Scroll to bottom
+                        container.scrollTop = container.scrollHeight;
+                        
+                        addLog(`[Imperative Tool] "add_message" executed by agent (Author: ${author})`);
+                        
+                        return { content: [{ type: "text", text: `Message successfully published by ${author}` }] };
+                    }
+                });
+                addLog("Registered 'add_message' imperative tool.");
+            } catch (err) {
+                addLog(`Error registering tools: ${err.message}`);
+            }
+        }
+
+        // --- Global WebMCP Events ---
+        window.addEventListener('toolactivated', ({ toolName }) => {
+            addLog(`[System Event] Tool "<b>${toolName}</b>" pre-filled fields. Attempting immediate update...`);
+            
+            // For the background color tool, let's try to pull the value immediately
+            if (toolName === 'change_background') {
+                // Wait a tiny bit for the browser to finish filling the fields
+                setTimeout(() => {
+                    const colorValue = colorInput.value;
+                    if (colorValue) {
+                        applyBackgroundColor(colorValue);
+                        addLog(`[Auto-Apply] Detected color "${colorValue}" from pre-filled form.`);
+                    }
+                }, 50);
+            }
+        });
+
+        window.addEventListener('toolcancel', ({ toolName }) => {
+            addLog(`[System Event] Tool "<b>${toolName}</b>" execution was cancelled.`);
+        });
+    </script>
+</body>
+</html>
