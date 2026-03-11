@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Built-in Proofreader - Premium Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="proofread.css">
+</head>
+<body>
+    <div class="app-container">
+        <a href="index.html" class="home-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back to Home
+        </a>
+
+        <header>
+            <h1>Proofreader AI</h1>
+            <p class="subtitle">Elevate your writing with Built-in Chrome AI</p>
+        </header>
+
+        <div class="workspace">
+            <div class="input-section">
+                <div class="label">Input Text</div>
+                <textarea id="text-input" placeholder="Paste your text here to find grammar and spelling mistakes..."></textarea>
+                <div id="proofread-view" class="proofread-view" style="display: none;"></div>
+            </div>
+            
+            <div class="output-section">
+                <div class="label">Live Insights & Status</div>
+                <div id="status-bar" class="status-bar status-info">
+                    Checking AI availability...
+                </div>
+                
+                <div class="card-hint" style="margin-top: auto; padding: 20px; background: #fff; border-radius: 16px; border: 1px dashed #cbd5e1; color: var(--text-muted); font-size: 0.9rem;">
+                    <strong>How it works:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Enter your text on the left.</li>
+                        <li>Click "Proofread" to analyze.</li>
+                        <li>Errors will be highlighted in red.</li>
+                        <li>Click on a highlight to see suggestions.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button id="btn-proofread" class="btn btn-primary">
+                <div id="loading-spinner" class="loading-spinner"></div>
+                <span>Proofread Text</span>
+            </button>
+            <button id="btn-reset" class="btn btn-secondary" style="display: none;">
+                <span>Edit Again</span>
+            </button>
+        </div>
+
+        <div id="correction-tooltip" class="correction-popup">
+            <div class="popup-header">Suggested Correction</div>
+            <div id="suggestion-value" class="suggestion-text"></div>
+            <div id="explanation-value" class="explanation-text"></div>
+            <div class="popup-actions">
+                <button id="btn-cancel-correction" class="btn btn-secondary btn-small">Ignore</button>
+                <button id="btn-apply-correction" class="btn btn-apply btn-small">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="proofread.js"></script>
+</body>
+</html>
